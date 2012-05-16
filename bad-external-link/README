@@ -1,0 +1,2 @@
+Le but de ce job est d'extraire le taux horaire de 404, en extrayant l'url ciblé et le referer.
+On retrouve en suite les sites tiers ou les pages interne ayant de mauvais lien
