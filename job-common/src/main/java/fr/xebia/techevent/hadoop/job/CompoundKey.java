@@ -6,11 +6,28 @@ import org.apache.hadoop.io.WritableComparable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
-public class CompoundKey<K1 extends WritableComparable, K2 extends WritableComparable> implements WritableComparable<CompoundKey<K1, K2>> {
+public abstract class CompoundKey<K1 extends WritableComparable, K2 extends WritableComparable> implements WritableComparable<CompoundKey<K1, K2>> {
 
-    private K1 k1;
-    private K2 k2;
+    protected K1 k1;
+    protected K2 k2;
+
+    protected abstract Class k1Type();
+
+    protected abstract Class k2Type();
+
+    public CompoundKey() {
+        try {
+            this.k1 = (K1) k1Type().newInstance();
+            this.k2 = (K2) k2Type().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 
     public CompoundKey(K1 k1, K2 k2) {
         this.k1 = k1;
@@ -40,5 +57,25 @@ public class CompoundKey<K1 extends WritableComparable, K2 extends WritableCompa
 
     public K2 getK2() {
         return k2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompoundKey that = (CompoundKey) o;
+
+        if (!k1.equals(that.k1)) return false;
+        if (!k2.equals(that.k2)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = k1.hashCode();
+        result = 31 * result + k2.hashCode();
+        return result;
     }
 }
