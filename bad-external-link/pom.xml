@@ -5,9 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>fr.xebia.techevent.hadoop</groupId>
-        <artifactId>job-parent</artifactId>
+        <artifactId>root</artifactId>
         <version>1.0</version>
-        <relativePath>../job-parent</relativePath>
     </parent>
 
     <artifactId>bad-external-link</artifactId>

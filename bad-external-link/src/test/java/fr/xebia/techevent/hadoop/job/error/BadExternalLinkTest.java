@@ -1,30 +1,29 @@
-package fr.xebia.techevent.hadoop.job.exo1;
+package fr.xebia.techevent.hadoop.job.error;
 
 
-
+import fr.xebia.techevent.hadoop.job.CompoundKey;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
-import org.apache.hadoop.mrunit.mapreduce.MapReduceDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
 
 public class BadExternalLinkTest {
 
-    MapDriver<LongWritable, Text, Text, Text> mapDriver;
-    ReduceDriver<Text, Text, Text, Text> reduceDriver;
+    MapDriver<LongWritable, Text, CompoundKey<Text, IntWritable>, Text> mapDriver;
+    ReduceDriver<CompoundKey<Text, IntWritable>, Text, CompoundKey<Text, IntWritable>, IntWritable> reduceDriver;
 
     @Before
     public void setUp() {
-        BadExternalLinkMapper mapper = new BadExternalLinkMapper();
-        BadExternalLinkReducer reducer = new BadExternalLinkReducer();
+        ErrorByTimeUnitMapper mapper = new ErrorByTimeUnitMapper();
+        AgregateErrorByMinute reducer = new AgregateErrorByMinute();
 
-        mapDriver = new MapDriver<LongWritable, Text, Text, Text>();
+        mapDriver = new MapDriver<LongWritable, Text, CompoundKey<Text, IntWritable>, Text>();
         mapDriver.setMapper(mapper);
 
-        reduceDriver = new ReduceDriver<Text, Text, Text, Text>();
+        reduceDriver = new ReduceDriver<CompoundKey<Text, IntWritable>, Text, CompoundKey<Text, IntWritable>, IntWritable>();
         reduceDriver.setReducer(reducer);
     }
 
@@ -32,13 +31,13 @@ public class BadExternalLinkTest {
     public void request_with_404_should_return_page_and_referer() {
         mapDriver.withInput(new LongWritable(1), new Text(
                 "78.236.167.225 - - [09/May/2011:12:56:19 +0200] \"GET /non-existing.html HTTP/1.1\" 404 505 \"http://site-partenaire.com/content/article1.html\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_6) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.57 Safari/534.24"));
-        mapDriver.withOutput(new Text("non-existing.html"), new Text("http://site-partenaire.com/content/article1.html"));
+        mapDriver.withOutput(new CompoundKey<Text, IntWritable>(new Text("09/May/2011:12:56"), new IntWritable(404)), new Text("/non-existing.html"));
         mapDriver.runTest();
     }
 
 
     @Test
-    public void request_other_than_404_should_return_nothing() {
+    public void request_other_than_error_should_return_nothing() {
         mapDriver.withInput(new LongWritable(1), new Text(
                 "78.236.167.225 - - [09/May/2011:12:56:19 +0200] \"GET /existing.html HTTP/1.1\" 200 505 \"http://site-partenaire.com/content/article1.html\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_6) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.57 Safari/534.24"));
         mapDriver.runTest();

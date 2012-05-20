@@ -5,13 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>fr.xebia.techevent.hadoop</groupId>
-        <artifactId>job-parent</artifactId>
+        <artifactId>root</artifactId>
         <version>1.0</version>
-        <relativePath>../job-parent</relativePath>
     </parent>
 
     <artifactId>job-common</artifactId>
     <version>1.0</version>
 
-    
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.mrunit</groupId>
+            <artifactId>mrunit</artifactId>
+            <version>0.9.0-incubating</version>
+            <classifier>hadoop1</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+    </dependencies>
+
+
 </project>
