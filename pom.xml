@@ -15,6 +15,7 @@
         <module>log-mock</module>
         <module>bad-external-link</module>
         <module>parcours-client</module>
+        <module>topview</module>
     </modules>
 
 </project>
