@@ -1,71 +1,431 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <title>Flume-hadoop-workshop by xebia-france</title>
-  </head>
+</head>
 
-  <body>
-    <div id="container">
-      <div class="inner">
+<body>
+<div id="container">
+<div class="inner">
 
-        <header>
-          <h1>Flume-hadoop-workshop</h1>
-          <h2>Workshop hadoop flume</h2>
-        </header>
+<header>
+    <h1>Flume-hadoop-workshop</h1>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/xebia-france/flume-hadoop-workshop/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/xebia-france/flume-hadoop-workshop/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/xebia-france/flume-hadoop-workshop" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+    <h2>By Xebia France</h2>
+</header>
 
-        <hr>
+<section id="downloads" class="clearfix">
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/zipball/master" id="download-zip"
+       class="button"><span>Download .zip</span></a>
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/tarball/master" id="download-tar-gz"
+       class="button"><span>Download .tar.gz</span></a>
+</section>
 
-        <section id="main_content">
-          <h3>Welcome to GitHub Pages.</h3>
+<hr>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<section id="main_content">
+<h3>Infrastructure</h3>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>For this workshop, we provide 4 Amazon EC2 server by team.
+    2 of this server for Hadoop Cluster and 2 for application.</p>
+
+<p>TODO Infrastructure diagram</p>
+
+<h4>Your EC2 instance</h4>
+<table>
+    <tr>
+        <th>Role</th>
+        <th>user and instance</th>
+    </tr>
+    <tr>
+        <td>Application 1</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Application 2</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Hadoop 'master'</td>
+        <td><code>ec2-user@flume-hadoop-master-team-X.xebia-techevent.com</code></td>
+    </tr>
+    <tr>
+        <td>Hadoop 'slave'</td>
+        <td><code>ec2-user@flume-hadoop-master-team-X.xebia-techevent.com</code></td>
+    </tr>
+</table>
+
+<h4>Connection to Amazon EC2 (with macos or linux)</h4>
+
+<p><pre>
+    $ wget url-of-key on s3
+    $ ssh -i xte-flume.pem ec2-user@flume-hadoop-master-team-X</pre>
+</p>
+
+<h4>Connection to Amazon EC2 (putty on Windows)</h4>
+
+<p>TODO Print screen of putty configuration</p>
 
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-<h3>Designer Templates</h3>
+<h3>Hadoop configuration</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>Hadoop is installed as a standard linux application with Cloudera packaging.</p>
 
-<h3>Rather Drive Stick?</h3>
+<p>
+<table>
+    <tr>
+        <th>Part of application</th>
+        <th>Directory</th>
+    </tr>
+    <tr>
+        <td>configuration</td>
+        <td><code>/etc/hadoop/conf</code></td>
+    </tr>
+    <tr>
+        <td>Namenode log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Jobtracker log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Namenode log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Jobtracker log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Datanode log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Tasktracker log</td>
+        <td><code>/var/log/hadoop-hdfd</code></td>
+    </tr>
+    <tr>
+        <td>Binary</td>
+        <td><code>/usr/lib/hadoop</code></td>
+    </tr>
+</table>
+</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>TODO DESCRIBE HADOOP CONFIGURATION</p>
+
+<h4>Hadoop Tips and command</h4>
+
+<ul>
+    <li>Stop all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service stop ;
+        done</code></li>
+    <li>Start all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service start ;
+        done</code></li>
+    <li>Restart all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service restart ;
+        done</code></li>
+    <li>Restart only datanode : <code>$ sudo service hadoop-datanode restart</code></li>
+    <li>Restart only tasktracker : <code>$ sudo service hadoop-tasktracker restart</code></li>
+    <li>List all file of an hdfs directory : <code>$ </code></li>
+    <li>Upload a file to hdfs : <code>$ </code></li>
+    <li>Download a file to hdfs : <code>$ </code></li>
+    <li>View file content from hdfs : <code>$ </code></li>
+    <li>delete a file from hdfs : <code>$ </code></li>
+    <li>delete a directory from hdfs : <code>$ </code></li>
+</ul>
+
+<h3>How develop Map-Reduce job</h3>
+
+<h3>Using mrunit for testing</h3>
+
+<h3>Deploy and run job to cluster</h3>
+
+<h3>Flume configuration</h3>
+
+<p>Flume is installed as a standard linux application with Cloudera packaging.</p>
+
+<p>
+<table>
+    <tr>
+        <th>Part of application</th>
+        <th>Directory</th>
+    </tr>
+    <tr>
+        <td>configuration</td>
+        <td><code>/etc/flume/conf</code></td>
+    </tr>
+    <tr>
+        <td>log</td>
+        <td><code>/var/log/flume</code></td>
+    </tr>
+    <tr>
+        <td>Binary</td>
+        <td><code>/usr/lib/flume</code></td>
+    </tr>
+</table>
+</p>
+<p>TODO DESCRIBE FLUME CONFIGURATION</p>
+
+<h4>Flume tips</h4>
+
+<ul>
+    <li>Stop flume service : <code>$ </code></li>
+    <li>Start flume service : <code>$ </code></li>
+    <li>Restart flume service : <code>$ </code></li>
+</ul>
+
+<h4>Configuration exemple</h4>
+<h5>Source from exec command</h5>
+    <pre>
+
+    </pre>
+
+<h5>Souce from syslog</h5>
+<pre>
+
+</pre>
+
+<h5>Source from channel</h5>
+<pre>
+
+</pre>
+
+<h5>Sink to channel</h5>
+<pre>
+
+</pre>
+
+<h5>Sink to file</h5>
+<pre>
+
+</pre>
+
+<h5>Sink to HDFS</h5>
+<pre>
+
+</pre>
+
+<h4>Flume-ng debugging</h4>
+
+Exemple: Source syslog to console
+Create a test configuration file my-test-conf.conf <pre>
+    # Define a memory channel called ch1 on agent1
+    agent1.channels.ch1.type = memory
+
+    # Here exec1 is source name.
+    agent1.sources.exec1.channels = ch1
+    agent1.sources.exec1.type = exec
+    agent1.sources.exec1.command = tail -F /home/hadoop/as/ash
+    #in /home/hadoop/as/ash i have kept a text file.
+
+    # Define a logger sink that simply logs all events it receives
+    # and connect it to the other end of the same channel.
+    # Here HDFS is sink name.
+    agent1.sinks.HDFS.channel = ch1
+    agent1.sinks.HDFS.type = hdfs
+    agent1.sinks.HDFS.hdfs.path = hdfs://localhost:54310/usr
+    agent1.sinks.HDFS.hdfs.file.Type = DataStream
+
+    # Finally, now that we've defined all of our components, tell
+    # agent1 which ones we want to activate.
+    agent1.channels = ch1
+    #source name can be of anything.(here i have chosen exec1)
+    agent1.sources = exec1
+    #sinkname can be of anything.(here i have chosen HDFS)
+    agent1.sinks = HDFS
+</pre>
+Start agent from command line : <code>$ flume-ng --conf my-test-conf.conf -n agentTest</code>
+
+<h3>Application Server installation</h3>
+
+The application used for generating log is a standard Java Web application deployed in Tomcat.
+Tomcat generate access log, no apache in front-end. All the applicative log are generated by logback.
+
+<h4>tomcat and application configuration file</h4>
+
+<table>
+    <tr>
+        <th>Part of application</th>
+        <th>Directory</th>
+    </tr>
+    <tr>
+        <td>Tomcat access-log</td>
+        <td><code></code></td>
+    </tr>
+    <tr>
+        <td>Application log</td>
+        <td><code>/var/log/flume</code></td>
+    </tr>
+</table>
+
+<h4>Tocmat tips</h4>
+
+<ul>
+    <li>Stop tomcat service : <code>$ </code></li>
+    <li>Start tomcat service : <code>$ </code></li>
+    <li>Restart tomcat service : <code>$ </code></li>
+</ul>
+
+<h4>Syslog configuration</h4>
+
+<p>For this workshop all syslog-ng configuration is ready.
+    We only describe configuration added by us for this workshop after a clean installation</p>
+
+<h3>Exercice 1. Redirect Tomcat log to Syslog</h3>
+
+<h4>Redirect access log</h4>
+
+<p>Natively Tomcat write access-log using The Java Logging API. This Api cannot send log to syslog, only on file.
+    We need to extends Tomcat AccessLogValve. See <a
+            href="http://marcoscorner.walther-family.org/2012/06/apache-tomcat-access-log-to-syslogd/">this blog</a>.
+    Tomcat provide for this workshop has SyslogAccessLogValve installed.
+    Configure Tomcat to use this valve instead standard access logging valve.</p>
+
+<p>Stop Tomcat instance : </p>
+
+<p><code>$ sudo service tomcat7 stop</code></p>
+
+<p>Open tomcat server config file : </p>
+
+<p><code>$ vi /usr/lib/tomcat7/conf/server.xml</code></p>
+
+<p>Replace current AccessLogValve by this new valve : </p>
+
+<pre>
+    &lt;Valve className="org.apache.catalina.valves.SyslogAccessLogValve"
+    hostname="localhost"
+    facility="local6"
+    pattern="common"
+    resolveHosts="false"/&gt;
+</pre>
+
+<p>Start Tomcat instance : </p>
+
+<p><code>$ sudo service tomcat7 start</code></p>
+
+<p>You can check configuration using syslog in debug mode.</p>
+
+<p>Stop syslog-ng service</p>
+
+<p><code>$ sudo service syslog-ng stop</code></p>
+
+<p>Start syslog-ng as console command :</p>
+
+<p><code>$ sudo syslog-ng -Fevd</code></p>
+
+<p>You must see access log of tomcat in console. </p>
+<pre>
+    10:10:20 dfsdf.html ... TODO put example access log
+    10:10:20 dfsdf.html ... TODO put example access log
+</pre>
+
+<p>Quit syslog-ng with <code>CTRL+C</code>.</p>
+
+<p>Restart syslog-ng service</p>
+
+<p><code>$ sudo service syslog-ng start</code></p>
+
+<h4>Redirect application log</h4>
+
+<p>The most of popular java log framework provide syslog appender.
+    See <a href="http://wiki.apache.org/logging-log4j/syslog">this page</a> for log4j
+    and <a href="http://logback.qos.ch/manual/appenders.html#SyslogAppender">this</a> for logback.
+</p>
+
+<p>The provided applications use logback.</p>
+
+<p>Open log configuration file : </p>
+
+<p><code>$ vi /usr/lib/tomcat7/webapps/ROOT/WEB-INF/classes/logback.xml</code></p>
+
+<p>Add syslog appender</p>
+<pre>
+        &lt;appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender"&gt;
+            &lt;syslogHost&gt;remote_home&lt;/syslogHost&gt;
+            &lt;facility&gt;AUTH&lt;/facility&gt;
+            &lt;suffixPattern&gt;[%thread] %logger %msg&lt;/suffixPattern&gt;
+        &lt;/appender&gt;
+</pre>
+
+<p>Add ths syslog appender-ref for root logger</p>
+
+<pre>
+        &lt;root level="INFO"&gt;
+            &lt;appender-ref ref="SYSLOG" /&gt;
+        &lt;/root&gt;
+</pre>
+
+<p>You can check that log correctly send to syslog in the same manner than access log.</p>
+
+<h3>Exercice 2. Centralize log with flume</h3>
+
+<p>TODO.</p>
+<ul>
+    <li>create an agent on each applicative server.</li>
+    <li>Source tcp syslog sink console</li>
+    <li>Test...</li>
+
+    <li>Create a 'collector' on a log server node.</li>
+    <li>Redirect each agent on this collector.</li>
+    <li>Write collected log on a file</li>
+</ul>
+
+
+<h3>Exercice 3. Put your log on Hadoop</h3>
+
+<p>TODO</p>
+<ul>
+    <li>Change sink of collector to HDFS</li>
+    <li>Install a collector on the second hadoop node.</li>
+</ul>
+
+<h3>Exercice 4. Process your log with map-reduce</h3>
+
+<p>TODO</p>
+
+<p>Develop with mrunit some simple jobs (filter 404, How many error by hours...) </p>
+
+<p>Deploy them on cluster. Write job result on hdfs</p>
+
+<h3>Exercice 5. Perspective</h3>
+
+<p>Cron your job</p>
+
+<p>Organize your log file and result</p>
+
+<p>Feeds a database or a Mongo with job result</p>
 
 <h3>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>
+    Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+    Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+    Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+    Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+    Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+    Mathieu Bigorne (<a href="https://github.com/mathieubigorne" class="user-mention">@mathieubigorne</a>),<br/>
+    Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+    Guillaume Arnaud (<a href="https://github.com/TODO" class="user-mention">@TODO</a>),<br/>
+    Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+</p>
 
-<h3>Support or Contact</h3>
+</section>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+<footer>
+    Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+</footer>
 
-        <footer>
-          Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
 
-        
-      </div>
-    </div>
-  </body>
+</div>
+</div>
+</body>
 </html>
