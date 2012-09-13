@@ -143,6 +143,13 @@
     <li>delete a directory from hdfs : <code>$ </code></li>
 </ul>
 
+<h4>Hadoop web console</h4>
+
+<ul>
+    <li>Hadoop HDFS Console : <code>http://flume-hadoop-master-team-1.aws.xebiatechevent.info:50070/</code></li>
+    <li>Hadoop Job Console : <code>http://flume-hadoop-master-team-1.aws.xebiatechevent.info:50030/</code></li>
+</ul>
+
 <h3>How develop Map-Reduce job</h3>
 
 <h3>Using mrunit for testing</h3>
@@ -191,27 +198,53 @@
 
 <h5>Souce from syslog</h5>
 <pre>
+    agent.sources = syslog
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
 
+    agent.sources.syslog.type = syslogtcp (or syslogudp)
+    agent.sources.syslog.port = 8200
+    agent.sources.syslog.host = localhost
+    agent.sources.syslog.channels = memoryChannel
 </pre>
 
 <h5>Source from channel</h5>
 <pre>
+    agent.sources = avro-collection-source
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
 
+    agent.sources.avro-collection-source.channels = memoryChannel
+    agent.sources.avro-collection-source.type = avro
+    agent.sources.avro-collection-source.bind = localhost
+    agent.sources.avro-collection-source.port = 8200
 </pre>
 
 <h5>Sink to channel</h5>
 <pre>
-
+    agent.sinks = avro-forward-sink
+    agent.sinks.avro-forward-sink.channel = memoryChannel
+    agent.sinks.avro-forward-sink.type = avro
+    agent.sinks.avro-forward-sink.hostname = localhost
+    agent.sinks.avro-forward-sink.port = 8200
 </pre>
 
 <h5>Sink to file</h5>
 <pre>
-
+    agent.sinks = fileSink
+    agent.sinks.fileSink.type = FILE_ROLL
+    agent.sinks.fileSink.channels = memoryChannel
+    agent.sinks.fileSink.sink.directory = /var/log/flume
 </pre>
 
 <h5>Sink to HDFS</h5>
 <pre>
-
+    agent.sinks = HDFSEventSink
+    agent.sinks.HDFSEventSink.channel = memoryChannel
+    agent.sinks.HDFSEventSink.type = <hdfs></hdfs>
+    agent.sinks.HDFSEventSink.hdfs.path = hdfs://PATH_TO_HDFS
 </pre>
 
 <h4>Flume-ng debugging</h4>
