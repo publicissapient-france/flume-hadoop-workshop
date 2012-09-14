@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume-hadoop-workshop by xebia-france</title>
+</head>
+
+<body>
+<div id="container">
+    <div class="inner">
+
+        <header>
+            <h1>Flume-hadoop-workshop</h1>
+
+            <h2>Exercise 1. Redirect Tomcat log to Syslog</h2>
+        </header>
+
+        <hr>
+
+        <section id="main_content">
+
+            <h3>Redirect access log</h3>
+
+            <p>Natively Tomcat write access-log using The Java Logging API. This Api cannot send log to syslog, only on
+                file.
+                We need to extends Tomcat AccessLogValve. See <a
+                        href="http://marcoscorner.walther-family.org/2012/06/apache-tomcat-access-log-to-syslogd/">this
+                    blog</a>.
+                Tomcat provide for this workshop has SyslogAccessLogValve installed.
+                Configure Tomcat to use this valve instead standard access logging valve.</p>
+
+            <p>Stop Tomcat instance : </p>
+
+            <p><code>$ sudo service tomcat7 stop</code></p>
+
+            <p>Open tomcat server config file : </p>
+
+            <p><code>$ vi /usr/lib/tomcat7/conf/server.xml</code></p>
+
+            <p>Replace current AccessLogValve by this new valve : </p>
+
+<pre>
+    &lt;Valve className="org.apache.catalina.valves.SyslogAccessLogValve"
+    hostname="localhost"
+    facility="local6"
+    pattern="common"
+    resolveHosts="false"/&gt;
+</pre>
+
+            <p>Start Tomcat instance : </p>
+
+            <p><code>$ sudo service tomcat7 start</code></p>
+
+            <p>You can check configuration using syslog in debug mode.</p>
+
+            <p>Stop syslog-ng service</p>
+
+            <p><code>$ sudo service syslog-ng stop</code></p>
+
+            <p>Start syslog-ng as console command :</p>
+
+            <p><code>$ sudo syslog-ng -Fevd</code></p>
+
+            <p>You must see access log of tomcat in console. </p>
+<pre>
+    10:10:20 dfsdf.html ... TODO put example access log
+    10:10:20 dfsdf.html ... TODO put example access log
+</pre>
+
+            <p>Quit syslog-ng with <code>CTRL+C</code>.</p>
+
+            <p>Restart syslog-ng service</p>
+
+            <p><code>$ sudo service syslog-ng start</code></p>
+
+            <h3>Redirect application log</h3>
+
+            <p>The most of popular java log framework provide syslog appender.
+                See <a href="http://wiki.apache.org/logging-log4j/syslog">this page</a> for log4j
+                and <a href="http://logback.qos.ch/manual/appenders.html#SyslogAppender">this</a> for logback.
+            </p>
+
+            <p>The provided applications use logback.</p>
+
+            <p>Open log configuration file : </p>
+
+            <p><code>$ vi /usr/lib/tomcat7/webapps/ROOT/WEB-INF/classes/logback.xml</code></p>
+
+            <p>Add syslog appender</p>
+<pre>
+        &lt;appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender"&gt;
+            &lt;syslogHost&gt;remote_home&lt;/syslogHost&gt;
+            &lt;facility&gt;AUTH&lt;/facility&gt;
+            &lt;suffixPattern&gt;[%thread] %logger %msg&lt;/suffixPattern&gt;
+        &lt;/appender&gt;
+</pre>
+
+            <p>Add ths syslog appender-ref for root logger</p>
+
+<pre>
+        &lt;root level="INFO"&gt;
+            &lt;appender-ref ref="SYSLOG" /&gt;
+        &lt;/root&gt;
+</pre>
+
+            <p>You can check that log correctly send to syslog in the same manner than access log.</p>
+
+        </section>
+
+        <footer>
+            <h3>Authors and Contributors</h3>
+
+
+            <p>
+                Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+                Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+                Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+                Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+                Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+                Mathieu Bigorne (<a href="https://github.com/mathieubigorne"
+                                    class="user-mention">@mathieubigorne</a>),<br/>
+                Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+                Guillaume Arnaud (<a href="https://github.com/TODO" class="user-mention">@TODO</a>),<br/>
+                Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+            </p>
+
+            Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+            <p>Le contenu de ce workshop est sous <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br> <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+                    src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+        </footer>
+
+
+    </div>
+</div>
+</body>
+</html>
