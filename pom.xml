@@ -12,10 +12,7 @@
 
     <modules>
         <module>job-common</module>
-        <module>log-mock</module>
-        <module>bad-external-link</module>
-        <module>parcours-client</module>
-        <module>topview</module>
+        <module>errorcode-filter</module>
     </modules>
 
 </project>
