@@ -13,6 +13,7 @@
     <modules>
         <module>job-common</module>
         <module>errorcode-filter</module>
+        <module>word-filter</module>
     </modules>
 
 </project>
