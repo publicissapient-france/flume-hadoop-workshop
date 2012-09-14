@@ -9,11 +9,11 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
-public class Search404Mapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+public class SearchCodeMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         AccessLog al = LogParser.parseAccessLog(value.toString());
-        if (al != null && al.returnCode.equals("404")) {
+        if (al != null && al.returnCode.equals(context.getConfiguration().get("ERROR_CODE"))) {
             context.write(new Text(al.resources), new IntWritable(1));
         }
     }

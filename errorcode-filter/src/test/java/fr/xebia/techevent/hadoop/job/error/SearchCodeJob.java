@@ -1,7 +1,7 @@
 package fr.xebia.techevent.hadoop.job.error;
 
 
-import fr.xebia.techevent.hadoop.job.CompoundKey;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -14,14 +14,14 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
-public class Search404Job {
+public class SearchCodeJob {
 
     MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
     ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
 
     @Before
     public void setUp() {
-        Search404Mapper mapper = new Search404Mapper();
+        SearchCodeMapper mapper = new SearchCodeMapper();
         CountReducer reducer = new CountReducer();
 
         mapDriver = new MapDriver<LongWritable, Text, Text, IntWritable>();
@@ -33,6 +33,9 @@ public class Search404Job {
 
     @Test
     public void request_with_404_should_count_1() {
+        Configuration conf = new Configuration();
+        conf.set("ERROR_CODE", "404");
+        mapDriver.setConfiguration(conf);
         mapDriver.withInput(new LongWritable(1), new Text(
                 "78.236.167.225 - - [09/mai/2011:12:56:19 +0200] \"GET /non-existing.html HTTP/1.1\" 404 505"));
         mapDriver.withOutput(new Text("/non-existing.html"), new IntWritable(1));
@@ -42,6 +45,9 @@ public class Search404Job {
 
     @Test
     public void request_other_than_error_should_return_nothing() {
+        Configuration conf = new Configuration();
+        conf.set("ERROR_CODE", "404");
+        mapDriver.setConfiguration(conf);
         mapDriver.withInput(new LongWritable(1), new Text(
                 "78.236.167.225 - - [09/mai/2011:12:56:19 +0200] \"GET /existing.html HTTP/1.1\" 200 505"));
         mapDriver.runTest();
