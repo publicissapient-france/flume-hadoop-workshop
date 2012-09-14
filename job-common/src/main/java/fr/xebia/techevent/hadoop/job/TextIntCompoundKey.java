@@ -1,17 +1,17 @@
-package fr.xebia.techevent.hadoop.job.error;
+package fr.xebia.techevent.hadoop.job;
 
 import fr.xebia.techevent.hadoop.job.CompoundKey;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 
-public class TextTextCompoundKey extends CompoundKey<Text, Text> {
+public class TextIntCompoundKey extends CompoundKey<Text, IntWritable> {
 
-    public TextTextCompoundKey() {
+    public TextIntCompoundKey() {
         super();
     }
 
-    public TextTextCompoundKey(Text text, Text text2) {
-        super(text, text2);
+    public TextIntCompoundKey(Text text, IntWritable intWritable) {
+        super(text, intWritable);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class TextTextCompoundKey extends CompoundKey<Text, Text> {
 
     @Override
     protected Class k2Type() {
-        return Text.class;
+        return IntWritable.class;
     }
 
 
