@@ -71,8 +71,8 @@ For writing a Mapper :
     <li>You must extends Mapper class with &lt;INPUT_KEY_TYPE, INPUT_KEY_VALUE, OUTPUT_KEY_TYPE,
         OUTPUT_KEY_VALUE&gt;</li>
     <li>With a FileInputFormat (all exercises of this workshop use it) INPUT_KEY_TYPE are LongWritable and
-        INPUT_KEY_VALUE are TEXT/li>
-    <li>the map method are called exactly one time by line, with key as file offset and value as line value</li>
+        INPUT_KEY_VALUE are Text</li>
+    <li>the map method is called exactly one time by line, with key as file offset and value as line value</li>
     <li>For each call of map, you can call context.write(...) 0, 1 or n times</li>
 </ul>
 
@@ -96,6 +96,13 @@ Example with wordcount reducer. This reducer count occurence of each word.
         }
     </code>
 </pre>
+
+For writing a Reducer :
+<ul>
+    <li>You must extends Reducer class with &lt;INPUT_KEY_TYPE, INPUT_KEY_VALUE, OUTPUT_KEY_TYPE,
+        OUTPUT_KEY_VALUE&gt;</li>
+    <li>Your input key and value are of the same type as the mapper's output key and value.</li>
+</ul>
 
 
 <h4>Job class</h4>
@@ -126,6 +133,12 @@ WordcountJob.
         }
     </code>
 </pre>
+
+For writing a Job :
+<ul>
+    <li>YJob is the glue beetwen your mapper and reducer classes.</li>
+    <li>Every parameter needed is dependent of your previous classes.</li>
+</ul>
 
 <h3>Using mrunit for testing</h3>
 
@@ -179,6 +192,8 @@ WordcountJob.
 
 <h3>Run job locally for testing</h3>
 
+TODO
+
 <h3>Deploy and run job to cluster</h3>
 
 <ul>
@@ -190,6 +205,8 @@ WordcountJob.
 
 
 <h3>Flume tips</h3>
+
+TODO
 
 <ul>
     <li>Stop flume service : <code>$ </code></li>
@@ -215,7 +232,7 @@ WordcountJob.
     agent.sources.syslog.channels = memoryChannel
 </pre>
 
-<h4>Source from channel</h4>
+<h4>Source from a flume agent</h4>
 <pre>
     agent.sources = avro-collection-source
     agent.channels = memoryChannel
@@ -228,7 +245,7 @@ WordcountJob.
     agent.sources.avro-collection-source.port = 8200
 </pre>
 
-<h4>Sink to channel</h4>
+<h4>Sink to a flume agent</h4>
 <pre>
     agent.sinks = avro-forward-sink
     agent.sinks.avro-forward-sink.channel = memoryChannel
