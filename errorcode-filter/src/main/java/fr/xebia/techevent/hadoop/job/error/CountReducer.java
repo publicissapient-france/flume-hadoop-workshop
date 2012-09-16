@@ -15,7 +15,7 @@ public class CountReducer extends Reducer<Text, IntWritable, Text, IntWritable> 
         int count = 0;
         Iterator<IntWritable> it = values.iterator();
         while (it.hasNext()) {
-            count += values.iterator().next().get();
+            count += it.next().get();
         }
 
         context.write(currentKey, new IntWritable(count));
