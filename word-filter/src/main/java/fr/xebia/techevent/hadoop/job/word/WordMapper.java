@@ -12,10 +12,10 @@ import java.io.IOException;
 public class WordMapper extends Mapper<LongWritable, Text, Text, Text> {
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-        String logLine = value.toString();
         AccessLog accessLog = LogParser.parseAccessLog(value.toString());
-        if (accessLog!=null  && logLine.contains("favicon")) {
-            context.write(new Text(accessLog.resources), new Text(logLine));
-        }
+        if (accessLog!=null) {
+        	Text logLine = value.toString().contains(context.getConfiguration().get("WORD_TO_BE_FILTERED")) ? new Text(value.toString()) : new Text();
+            context.write(new Text(accessLog.resources), logLine);
+        } 
     }
 }

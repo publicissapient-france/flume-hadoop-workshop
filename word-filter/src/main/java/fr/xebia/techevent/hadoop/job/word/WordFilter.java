@@ -25,6 +25,7 @@ public class WordFilter {
         job.setReducerClass(IdentityReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+        job.getConfiguration().set("WORD_TO_BE_FILTERED", args[0]);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }
