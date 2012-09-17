@@ -5,6 +5,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
@@ -19,7 +20,7 @@ public class WordFilterTest {
         Configuration conf = new Configuration();
         conf.set("WORD_TO_BE_FILTERED", "favicon");
         mapDriver = MapDriver.newMapDriver(new WordMapper()).withConfiguration(conf);
-        reduceDriver = ReduceDriver.newReduceDriver(new IdentityReducer());
+        reduceDriver = ReduceDriver.newReduceDriver(new Reducer<Text, Text, Text, Text>());
     }
 
     @Test

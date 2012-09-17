@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
@@ -22,7 +23,7 @@ public class WordFilter {
         FileOutputFormat.setOutputPath(job, new Path(args[1] + "/" + System.currentTimeMillis()));
         job.setMapperClass(WordMapper.class);
         
-        job.setReducerClass(IdentityReducer.class);
+        job.setReducerClass(Reducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
         job.getConfiguration().set("WORD_TO_BE_FILTERED", args[0]);
