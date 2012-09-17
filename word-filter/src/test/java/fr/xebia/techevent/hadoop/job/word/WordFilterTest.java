@@ -41,7 +41,7 @@ public class WordFilterTest {
                 .withInput(
                         new LongWritable(1),
                         new Text("78.236.167.225 - - [13/Sep/2012:22:20:33 +0200] \"GET /hotels/1 HTTP/1.1\" 200 2366"))
-                .withOutput(new Text("/hotels/1"), new Text()).runTest();
+                .runTest();
     }
 
     @Test
