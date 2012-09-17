@@ -214,10 +214,69 @@ TODO
     <li>Restart flume service : <code>$ </code></li>
 </ul>
 
-<h4>Source from exec command</h4>
-    <pre>
+<h4>Flume-ng debugging</h4>
 
-    </pre>
+Exemple: Testing flume-ng without external input
+Create a test configuration file my-test-conf.conf <pre>
+
+    minimalist-agent.channels.in-memory-channel.type = memory
+
+    minimalist-agent.sources.dummy-source.channels = in-memory-channel
+    minimalist-agent.sources.dummy-source.type = org.apache.flume.source.StressSource
+
+    minimalist-agent.sinks.logger-sink.channel = in-memory-channel
+    minimalist-agent.sinks.logger-sink.type = logger
+
+    minimalist-agent.channels = in-memory-channel
+    minimalist-agent.sources = dummy-source
+    minimalist-agent.sinks = logger-sink
+</pre>
+
+<p>Start flume-ng with command : <code>flume-ng agent --conf my-test-conf.conf -n minimalist-agent</code></p>
+<p>The log file of flume-ng should contains : </p>
+<pre>
+    2012-07-28 14:00:42,084 INFO sink.LoggerSink: Event: { headers:{} body: 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F ................ }
+</pre>
+
+Exemple: Source syslog to console
+Create a test configuration file my-test-conf.conf <pre>
+    # Define a memory channel called ch1 on agent1
+    agent1.channels.ch1.type = memory
+
+    # Here exec1 is source name.
+    agent1.sources.syslog.type = syslogtcp
+    agent1.sources.syslog.port = 1514
+    agent1.sources.syslog.host = localhost
+    agent1.sources.syslog.channels = ch1
+
+    # Define a logger sink that simply logs all events it receives
+    agent1.sinks.loggerSink.channel = ch1
+    agent1.sinks.loggerSink.type = logger
+
+    # Finally, now that we've defined all of our components, tell
+    # agent1 which ones we want to activate.
+    agent1.channels = ch1
+    #source name can be of anything.
+    agent1.sources = syslog
+    #sinkname can be of anything.
+    agent1.sinks = loggerSink
+</pre>
+Start agent from command line : <code>$ flume-ng --conf my-test-conf.conf -n agentTest</code>
+<p>The log file of flume-ng should contains : </p>
+<pre>
+    TODO
+</pre>
+
+
+<h4>Source from exec command</h4>
+<pre>
+    agent.sources = tail
+    agent.channels = memoryChannel
+
+    agent.sources.tail.type = exec
+    agent.sources.tail.command = tail -F /var/log/apache2/access.log
+    agent.sources.tail.channels = memoryChannel
+</pre>
 
 <h4>Souce from syslog</h4>
 <pre>
@@ -226,7 +285,7 @@ TODO
     agent.channels.memoryChannel.type = memory
     agent.channels.memoryChannel.capacity = 10000
 
-    agent.sources.syslog.type = syslogtcp (or syslogudp)
+    agent.sources.syslog.type = syslogtcp
     agent.sources.syslog.port = 8200
     agent.sources.syslog.host = localhost
     agent.sources.syslog.channels = memoryChannel
@@ -270,36 +329,32 @@ TODO
     agent.sinks.HDFSEventSink.hdfs.path = hdfs://PATH_TO_HDFS
 </pre>
 
-<h4>Flume-ng debugging</h4>
+<h4>Sink with load-balancing</h4>
+<pre>
+        agent.sources = seqGenSrc
+        agent.channels = memoryChannel
+        agent.sources.seqGenSrc.type = seq
 
-Exemple: Source syslog to console
-Create a test configuration file my-test-conf.conf <pre>
-    # Define a memory channel called ch1 on agent1
-    agent1.channels.ch1.type = memory
+        agent.sources.seqGenSrc.channels = memoryChannel
+        agent.channels.memoryChannel.type = memory
+        agent.channels.memoryChannel.capacity = 10000
 
-    # Here exec1 is source name.
-    agent1.sources.exec1.channels = ch1
-    agent1.sources.exec1.type = exec
-    agent1.sources.exec1.command = tail -F /home/hadoop/as/ash
-    #in /home/hadoop/as/ash i have kept a text file.
+        agent.sinkgroups = xebiaFlume
+        agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
+        agent.sinkgroups.xebiaFlume.processor.type = load_balance
+        agent.sinkgroups.xebiaFlume.processor.selector = round_robin
 
-    # Define a logger sink that simply logs all events it receives
-    # and connect it to the other end of the same channel.
-    # Here HDFS is sink name.
-    agent1.sinks.HDFS.channel = ch1
-    agent1.sinks.HDFS.type = hdfs
-    agent1.sinks.HDFS.hdfs.path = hdfs://localhost:54310/usr
-    agent1.sinks.HDFS.hdfs.file.Type = DataStream
+        agent.sinks = avro-forward-sink avro-forward-sink-secondary
+        agent.sinks.avro-forward-sink.channel = memoryChannel
+        agent.sinks.avro-forward-sink.type = avro
+        agent.sinks.avro-forward-sink.hostname = IP_SLAVE_1
+        agent.sinks.avro-forward-sink.port = 10000
 
-    # Finally, now that we've defined all of our components, tell
-    # agent1 which ones we want to activate.
-    agent1.channels = ch1
-    #source name can be of anything.(here i have chosen exec1)
-    agent1.sources = exec1
-    #sinkname can be of anything.(here i have chosen HDFS)
-    agent1.sinks = HDFS
+        agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
+        agent.sinks.avro-forward-sink-secondary.type = avro
+        agent.sinks.avro-forward-sink-secondary.hostname = IP_SLAVE_2
+        agent.sinks.avro-forward-sink-secondary.port = 10000
 </pre>
-Start agent from command line : <code>$ flume-ng --conf my-test-conf.conf -n agentTest</code>
 
 </section>
 
