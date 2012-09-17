@@ -69,6 +69,15 @@
                 agent.sinkgroups.xebiaFlume.processor.selector = round_robin
                 
                 agent.sinks = avro-forward-sink avro-forward-sink-secondary
+                agent.sinks.avro-forward-sink.channel = memoryChannel
+                agent.sinks.avro-forward-sink.type = avro
+                agent.sinks.avro-forward-sink.hostname = IP_SECOND_AGENT
+                agent.sinks.avro-forward-sink.port = PORT_SECOND_AGENT
+ 
+                agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
+                agent.sinks.avro-forward-sink-secondary.type = avro
+                agent.sinks.avro-forward-sink-secondary.hostname = IP_THIRD_AGENT
+                agent.sinks.avro-forward-sink-secondary.port = PORT_THIRD_AGENT
             </pre>
 
         </section>
