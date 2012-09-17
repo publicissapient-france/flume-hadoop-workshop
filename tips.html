@@ -88,9 +88,8 @@ Example with wordcount reducer. This reducer count occurence of each word.
             protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException {
                 Text currentKey = key;
                 int count = 0;
-                Iterator&lt;IntWritable&gt; it = values.iterator();
-                while (it.hasNext()) {
-                    count += values.iterator().next().get();
+                for (IntWritable value : values) {
+                    count += value.get();
                 }
                 context.write(currentKey, new IntWritable(count));
             }
@@ -152,31 +151,25 @@ For writing a Job :
 
             @Before
             public void setUp() {
-                WordcountMapper mapper = new WordcountMapper();
-                CountReducer reducer = new CountReducer();
-
-                mapDriver = new MapDriver&lt;LongWritable, Text, Text, IntWritable&gt;();
-                mapDriver.setMapper(mapper);
-
-                reduceDriver = new ReduceDriver&lt;Text, IntWritable, Text, IntWritable&gt;();
-                reduceDriver.setReducer(reducer);
+                mapDriver = MapDriver.newMapDriver(new WordcountMapper());
+                reduceDriver = ReduceDriver.newReduceDriver(new CountReducer());
             }
 
             @Test
             public void test_wordcount_mapper() {
-                mapDriver.withInput(new LongWritable(1), new Text("Xebia Hadoop workshop"));
-                mapDriver.withOutput(new Text("Xebia"), new IntWritable(1));
-                mapDriver.withOutput(new Text("Hadoop"), new IntWritable(1));
-                mapDriver.withOutput(new Text("Workshop"), new IntWritable(1));
-                mapDriver.runTest();
+                mapDriver.withInput(new LongWritable(1), new Text("Xebia Hadoop workshop"))
+                         .withOutput(new Text("Xebia"), new IntWritable(1))
+                         .withOutput(new Text("Hadoop"), new IntWritable(1))
+                         .withOutput(new Text("Workshop"), new IntWritable(1))
+                         .runTest();
             }
 
             @Test
             public void test_wordcount_reducer() {
-                reduceDriver.withInput(new Text("Xebia"), Arrays.asList(new IntWritable[]{new IntWritable(1), new
-                IntWritable(1)}));
-                reduceDriver.withOutput(new Text("Xebia"), new IntWritable(2));
-                reduceDriver.runTest();
+                reduceDriver.withInput(new Text("Xebia"),
+                                       Arrays.asList(new IntWritable[]{new IntWritable(1), new IntWritable(1)}))
+                            .withOutput(new Text("Xebia"), new IntWritable(2))
+                            .runTest();
             }
         }
     </code>
