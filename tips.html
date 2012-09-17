@@ -136,7 +136,7 @@ WordcountJob.
 
 For writing a Job :
 <ul>
-    <li>YJob is the glue beetwen your mapper and reducer classes.</li>
+    <li>Job is the glue beetwen your mapper and reducer classes.</li>
     <li>Every parameter needed is dependent of your previous classes.</li>
 </ul>
 
@@ -194,18 +194,16 @@ TODO
     <li>Build the jar. <code>mvn clean install</code></li>
     <li>Upload the jar to cluster. <code>scp -i ~/xte-flume.pem target/TODO.jar
         ec2-user@flume-hadoop-master-team-X.xebia-techevent.com</code></li>
-    <li>Run the job with <code>$ hadoop jar TODO.jar arg1 arg2</code></li>
+    <li>Run the job with <code>$ hadoop jar -your jar-.jar arg1 arg2 arg3</code></li>
 </ul>
 
 
 <h3>Flume tips</h3>
 
-TODO
-
 <ul>
-    <li>Stop flume service : <code>$ </code></li>
-    <li>Start flume service : <code>$ </code></li>
-    <li>Restart flume service : <code>$ </code></li>
+    <li>Stop flume service : <code>$ service flume-ng-agent stop</code></li>
+    <li>Start flume service : <code>$ service flume-ng-agent start</code></li>
+    <li>Restart flume service : <code>$ service flume-ng-agent restart</code></li>
 </ul>
 
 <h4>Flume-ng debugging</h4>
@@ -226,7 +224,7 @@ Create a test configuration file my-test-conf.conf <pre>
     minimalist-agent.sinks = logger-sink
 </pre>
 
-<p>Start flume-ng with command : <code>flume-ng agent --conf my-test-conf.conf -n minimalist-agent</code></p>
+<p>Start flume-ng with command : <code>flume-ng agent --conf-file my-test-conf.conf -n minimalist-agent</code></p>
 <p>The log file of flume-ng should contains : </p>
 <pre>
     2012-07-28 14:00:42,084 INFO sink.LoggerSink: Event: { headers:{} body: 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F ................ }
@@ -255,11 +253,11 @@ Create a test configuration file my-test-conf.conf <pre>
     #sinkname can be of anything.
     agent1.sinks = loggerSink
 </pre>
-Start agent from command line : <code>$ flume-ng --conf my-test-conf.conf -n agentTest</code>
-<p>The log file of flume-ng should contains : </p>
+Start agent from command line : <code>$ flume-ng agent --conf-file my-test-conf.conf -n agentTest</code>
+<!--<p>The log file of flume-ng should contains : </p>
 <pre>
     TODO
-</pre>
+</pre>-->
 
 
 <h4>Source from exec command</h4>
