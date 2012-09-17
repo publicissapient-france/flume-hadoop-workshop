@@ -51,26 +51,41 @@
                  agent.sources.syslog.channels = memoryChannel
             </pre>
 
-            <p>Add a sink to a flume server</p>
+            <p>Add a sink to a flume agent</p>
 
             <pre>
-
+                 agent.sinks = avro-forward-sink
+                 agent.sinks.avro-forward-sink.channel = memoryChannel
+                 agent.sinks.avro-forward-sink.type = avro
+                 agent.sinks.avro-forward-sink.hostname = IP_SECONDARY_AGENT
+                 agent.sinks.avro-forward-sink.port = PORT_SECONDARY_AGENT
             </pre>
 
             <h4>Configure a flume collector</h4>
 
-            <p>On flume master server edit flume configuration file <code>/etc/conf/flume.conf</code></p>
+            <p>On flume second agent edit flume configuration file <code>/etc/conf/flume.conf</code></p>
 
-            <p>Source from the two agents</p>
+            <p>Source from the first agents</p>
 
             <pre>
-
+                 agent.sources = avro-collection-source
+                 agent.channels = memoryChannel    
+                 agent.channels.memoryChannel.type = memory
+                 agent.channels.memoryChannel.capacity = 10000
+    
+                 agent.sources.avro-collection-source.channels = memoryChannel
+                 agent.sources.avro-collection-source.type = avro
+                 agent.sources.avro-collection-source.bind = IP_SECONDARY_AGENT
+                 agent.sources.avro-collection-source.port = PORT_SECONDARY_AGENT
             </pre>
 
             <h4>Sink to file</h4>
 
             <pre>
-
+                agent.sinks = fileSink
+                agent.sinks.fileSink.type = FILE_ROLL
+                agent.sinks.fileSink.channels = memoryChannel
+                agent.sinks.fileSink.sink.directory = /var/log/flume
             </pre>
 
             <p>Write collected log to a file. On this file you should see log of all server.</p>
