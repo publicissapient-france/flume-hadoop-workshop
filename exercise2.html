@@ -40,7 +40,15 @@
             <p>Add syslog source</p>
 
             <pre>
+                 agent.sources = syslog
+                 agent.channels = memoryChannel
+                 agent.channels.memoryChannel.type = memory
+                 agent.channels.memoryChannel.capacity = 10000
 
+                 agent.sources.syslog.type = syslogtcp (or syslogudp)
+                 agent.sources.syslog.port = YOUR_PORT
+                 agent.sources.syslog.host = YOUR_IP
+                 agent.sources.syslog.channels = memoryChannel
             </pre>
 
             <p>Add a sink to a flume server</p>
