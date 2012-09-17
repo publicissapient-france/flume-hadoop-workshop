@@ -27,11 +27,41 @@
         <hr>
 
         <section id="main_content">
-            <p>TODO</p>
+            <h4>Goal</h4>
 
-            <p>Develop with mrunit some simple jobs (filter 404, How many error by hours...) </p>
+            <p>Process your logs using Map/Reduce patterns</p>
+			<p>Unit tests and skeletons are provided, fill the holes !</p>
 
-            <p>Deploy them on cluster. Write job result on hdfs</p>
+            <h4>Find every line containing a given word</h4>
+
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterTest</i></p>
+            <p>Make it pass on your laptop, then deploy it on your cluster</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar -your jar name- -word to be filtered- -input path (from your hdfs)- -output path (on your hdfs)-</pre>
+
+            <h4>Count the various http return codes</h4>
+
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.error.SearchCodeJob</i></p>
+            <p>Make it pass on your laptop, then deploy it on your cluster</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar -your jar name- -error code to count- -input path (from your hdfs)- -output path (on your hdfs)-</pre>
+            
+            <h4>Count the various http return codes by hour</h4>
+
+            <p>Upgrade your previous job by count codes by the hour the code was returned</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar -your jar name- -error code to count- -input path (from your hdfs)- -output path (on your hdfs)-</pre>
+
+			<h4>Go deeper</h4>
+
+            <p>If you are already here, congratulations !</p>
+            
+            <p>Feel free to implement more use cases</p>
+            <p>Here are some ideas for you to code : display top 10 requested pages, identify slowest page...
+
 
         </section>
 
