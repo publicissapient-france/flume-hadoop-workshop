@@ -9,15 +9,15 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
-public class WordFilter {
+public class WordFilterJob {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 3) {
-            System.out.printf("Usage : %s [generic options] <word to be filtered> <input dir> <output dir>\n", WordFilter.class.getSimpleName());
+            System.out.printf("Usage : %s [generic options] <word to be filtered> <input dir> <output dir>\n", WordFilterJob.class.getSimpleName());
             return;
         }
         Job job = new Job(new Configuration(), "Filter logs by word job");
-        job.setJarByClass(WordFilter.class);
+        job.setJarByClass(WordFilterJob.class);
 
         FileInputFormat.setInputPaths(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path(args[2] + "/" + System.currentTimeMillis()));

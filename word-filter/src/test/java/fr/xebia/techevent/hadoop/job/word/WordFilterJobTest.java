@@ -11,7 +11,7 @@ import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WordFilterTest {
+public class WordFilterJobTest {
     private MapDriver<LongWritable, Text, Text, Text> mapDriver;
     private ReduceDriver<Text, Text, Text, Text> reduceDriver;
 
