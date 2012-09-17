@@ -33,10 +33,43 @@
             <p>Add high availability to log aggregation and storage</p>
 
             <h4>Change sink from file to hdfs</h4>
+            
+            <pre>
+                agent.sinks = HDFSEventSink
+                agent.sinks.HDFSEventSink.channel = memoryChannel
+                agent.sinks.HDFSEventSink.type = hdfs
+                agent.sinks.HDFSEventSink.hdfs.path = hdfs://PATH_TO_HDFS
+            </pre>
 
-            <h4>Install a second collector to second node</h4>
+            <h4>Install an another agent collector</h4>
+            
+            <pre>
+                agent.sources = avro-collection-source
+                agent.channels = memoryChannel
+                agent.sinks = HDFSEventSink
+                agent.sinks.HDFSEventSink.channel = memoryChannel
+                agent.sinks.HDFSEventSink.type = hdfs
+                agent.sinks.HDFSEventSink.hdfs.path = hdfs://DNS_MASTER_NODE
+ 
+                agent.channels.memoryChannel.type = memory
+                agent.channels.memoryChannel.capacity = 10000
+ 
+                agent.sources.avro-collection-source.channels = memoryChannel
+                agent.sources.avro-collection-source.type = avro
+                agent.sources.avro-collection-source.bind = IP_THIRD_AGENT
+                agent.sources.avro-collection-source.port = PORT_THIRD_AGENT
+            </pre>
 
             <h4>Configure roundrobin on flume agent</h4>
+            
+            <pre>
+                agent.sinkgroups = xebiaFlume
+                agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
+                agent.sinkgroups.xebiaFlume.processor.type = load_balance
+                agent.sinkgroups.xebiaFlume.processor.selector = round_robin
+                
+                agent.sinks = avro-forward-sink avro-forward-sink-secondary
+            </pre>
 
         </section>
 
