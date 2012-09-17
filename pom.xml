@@ -14,6 +14,7 @@
         <module>job-common</module>
         <module>errorcode-filter</module>
         <module>word-filter</module>
+		<module>errorcode-filter-per-hour</module>
     </modules>
 
 </project>
