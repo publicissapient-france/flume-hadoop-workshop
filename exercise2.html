@@ -47,8 +47,8 @@
                  agent.channels.memoryChannel.capacity = 10000
 
                  agent.sources.syslog.type = syslogtcp (or syslogudp)
-                 agent.sources.syslog.port = YOUR_PORT
-                 agent.sources.syslog.host = YOUR_IP
+                 agent.sources.syslog.port = 5140
+                 agent.sources.syslog.host = 127.0.0.1
                  agent.sources.syslog.channels = memoryChannel
             </pre>
 
@@ -58,8 +58,8 @@
                  agent.sinks = avro-forward-sink
                  agent.sinks.avro-forward-sink.channel = memoryChannel
                  agent.sinks.avro-forward-sink.type = avro
-                 agent.sinks.avro-forward-sink.hostname = IP_SECONDARY_AGENT
-                 agent.sinks.avro-forward-sink.port = PORT_SECONDARY_AGENT
+                 agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.xebia-techevent.com
+                 agent.sinks.avro-forward-sink.port = 5141
             </pre>
 
             <h4>Configure a flume collector</h4>
@@ -76,8 +76,8 @@
     
                  agent.sources.avro-collection-source.channels = memoryChannel
                  agent.sources.avro-collection-source.type = avro
-                 agent.sources.avro-collection-source.bind = IP_SECONDARY_AGENT
-                 agent.sources.avro-collection-source.port = PORT_SECONDARY_AGENT
+                 agent.sources.avro-collection-source.bind = 127.0.0.1
+                 agent.sources.avro-collection-source.port = 5141
             </pre>
 
             <h4>Sink to file</h4>

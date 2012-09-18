@@ -59,8 +59,8 @@
  
                 agent.sources.avro-collection-source.channels = memoryChannel
                 agent.sources.avro-collection-source.type = avro
-                agent.sources.avro-collection-source.bind = IP_THIRD_AGENT
-                agent.sources.avro-collection-source.port = PORT_THIRD_AGENT
+                agent.sources.avro-collection-source.bind = flume-hadoop-slave-team-X.xebia-techevent.com
+                agent.sources.avro-collection-source.port = 5142
             </pre>
 
             <h4>Configure roundrobin on first flume agent</h4>
@@ -74,13 +74,13 @@
                 agent.sinks = avro-forward-sink avro-forward-sink-secondary
                 agent.sinks.avro-forward-sink.channel = memoryChannel
                 agent.sinks.avro-forward-sink.type = avro
-                agent.sinks.avro-forward-sink.hostname = IP_SECOND_AGENT
-                agent.sinks.avro-forward-sink.port = PORT_SECOND_AGENT
+                agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.xebia-techevent.com
+                agent.sinks.avro-forward-sink.port = 5141
  
                 agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
                 agent.sinks.avro-forward-sink-secondary.type = avro
-                agent.sinks.avro-forward-sink-secondary.hostname = IP_THIRD_AGENT
-                agent.sinks.avro-forward-sink-secondary.port = PORT_THIRD_AGENT
+                agent.sinks.avro-forward-sink-secondary.hostname = flume-hadoop-slave-team-X.xebia-techevent.com
+                agent.sinks.avro-forward-sink-secondary.port = 5142
             </pre>
 
         </section>
