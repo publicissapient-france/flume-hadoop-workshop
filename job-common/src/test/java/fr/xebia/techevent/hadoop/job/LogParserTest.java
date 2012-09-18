@@ -9,7 +9,7 @@ public class LogParserTest{
 	
 	@Test
 	public void test_parseAccessLog() {
-		String testedLog = "127.0.0.1 - - [14/Sep/2012:09:26:56 +0200] \"GET /docs/manager-howto.html HTTP/1.1\" 404 1034";
+		String testedLog = "http-bio-8080-exec-8 1080   127.0.0.1 - - [14/Sep/2012:09:26:56 +0200] \"GET /docs/manager-howto.html HTTP/1.1\" 404 1034\\";
 		AccessLog al = LogParser.parseAccessLog(testedLog);
 		assertNotNull(al);
 		assertEquals("127.0.0.1", al.ip);

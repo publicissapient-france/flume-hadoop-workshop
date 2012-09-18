@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class LogParser {
 
-    private static final String ACCESS_LOG_PATTERN = "([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}) - - \\[(.*)\\] \"(.*) (.*) (.*)\" ([0-9]{3}) ([0-9]*)";
+    private static final String ACCESS_LOG_PATTERN = ".* .*   ([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}) - - \\[(.*)\\] \"(.*) (.*) (.*)\" ([0-9]{3}) ([0-9]*)\\\\";
 
     /**
      * Parse log of type "127.0.0.1 - - [14/Sep/2012:09:26:56 +0200] "GET /docs/manager-howto.html HTTP/1.1" 404 1034"
