@@ -49,11 +49,11 @@
     </tr>
     <tr>
         <td>Application 1</td>
-        <td><code>ec2-user@application-1-team-X.xebia-techevent.com</code></td>
+        <td><code>root@application-1-team-X.xebia-techevent.com</code></td>
     </tr>
     <tr>
         <td>Application 2</td>
-        <td><code>ec2-user@application-2-team-X.xebia-techevent.com</code></td>
+        <td><code>root@application-2-team-X.xebia-techevent.com</code></td>
     </tr>
     <tr>
         <td>Hadoop 'master'</td>
@@ -185,12 +185,16 @@ Tomcat generate access log, no apache in front-end. All the applicative log are 
                 <th>Directory</th>
             </tr>
             <tr>
+                <td>Tomcat home</td>
+                <td><code>/usr/share/apache-tomcat-7.0.22/</code></td>
+            </tr>
+            <tr>
                 <td>Tomcat access-log</td>
-                <td><code></code></td>
+                <td><code>/usr/share/apache-tomcat-7.0.22/logs/localhost_access_log.YYYY-MM-DD.txt</code></td>
             </tr>
             <tr>
                 <td>Application log</td>
-                <td><code>/var/log/flume</code></td>
+                <td><code>/usr/share/apache-tomcat-7.0.22/logs/catalina.out</code></td>
             </tr>
         </table>
     </p>
@@ -202,6 +206,13 @@ Tomcat generate access log, no apache in front-end. All the applicative log are 
     <li>Start tomcat service : <code>$ sudo service tomcat7 start</code></li>
     <li>Restart tomcat service : <code>$ sudo service tomcat7 restart</code></li>
 </ul>
+
+<h4>Using jmeter for generating load</h4>
+
+<p>Change current directory for jmeter binary</p>
+<p><code>cd /root/jakarta-jmeter-2.5.1/bin</code></p>
+<p>Start a script in command line</p>
+<p><code>./jmeter -n -t ../data/xebia-spring-travel.jmx -j jmeter.log</code></p>
 
 <h4>Syslog configuration</h4>
 
