@@ -2,6 +2,12 @@ package fr.xebia.techevent.hadoop.job.error.model;
 
 import org.apache.hadoop.io.Text;
 
+/**
+ * TODO
+ *   - la classe doit implémenter WritableComparable
+ *   - il faut implémenter les méthodes obligatoires
+ */
+
 public class ErrorInfo {
 
     private Text error;
