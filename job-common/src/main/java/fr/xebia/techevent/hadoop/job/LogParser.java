@@ -6,10 +6,23 @@ import java.util.regex.Pattern;
 
 public class LogParser {
 
-    private static final String ACCESS_LOG_PATTERN = ".* .*   ([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}) - - \\[(.*)\\] \"(.*) (.*) (.*)\" ([0-9]{3}) ([0-9]*)\\\\";
+    private static final String ACCESS_LOG_PATTERN = "" +
+            ".*?" + //                                                      Match anything
+            "([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})" + //      Capture IP Address
+            ".*?" + //                                                      Match anything
+            "\\[(.+)\\]" + //                                               Capture the date between square brackets
+            " \"(.*)" + //                                                  Capture the HTTP verb
+            " (.*)" + //                                                    Capture the requested path
+            " (.*)" + //                                                    Capture the protocol
+            "\" ([0-9]{3})" + //                                            Capture the return code
+            " ([0-9]+)" + //                                                Capture the process time
+            ".*?"; //                                                       Match anything the ends the log
 
     /**
-     * Parse log of type "127.0.0.1 - - [14/Sep/2012:09:26:56 +0200] "GET /docs/manager-howto.html HTTP/1.1" 404 1034"
+     * Parse log of type
+     * <p/>
+     * "127.0.0.1 - - [14/Sep/2012:09:26:56 +0200] "GET /docs/manager-howto.html HTTP/1.1" 404 1034"
+     * "78.236.167.225 - - [09/mai/2011:12:56:19 +0200] "GET /non-existing.html HTTP/1.1" 404 505"
      */
     public static AccessLog parseAccessLog(String log) {
         Pattern p = Pattern.compile(ACCESS_LOG_PATTERN);
