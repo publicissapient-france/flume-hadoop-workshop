@@ -49,11 +49,11 @@
     </tr>
     <tr>
         <td>Application 1</td>
-        <td><code>ec2-user@application-team-X-instance-1.aws.xebiatechevent.info</code></td>
+        <td><code>ubuntu@application-team-X-instance-0.aws.xebiatechevent.info</code></td>
     </tr>
     <tr>
         <td>Application 2</td>
-        <td><code>ec2-user@application-team-X-instance-2.aws.xebiatechevent.info</code></td>
+        <td><code>ubuntu@application-team-X-instance-1.aws.xebiatechevent.info</code></td>
     </tr>
     <tr>
         <td>Hadoop 'master'</td>
@@ -64,8 +64,6 @@
         <td><code>root@flume-hadoop-slave-team-X.aws.xebiatechevent.info</code></td>
     </tr>
 </table>
-
-    <p><a href="ip-appli.html">VOS IP pour CE SOIR</a></p>
 
 <h4>Connection to Amazon EC2 (with macos or linux)</h4>
 
@@ -180,15 +178,15 @@ Tomcat generates access log, no apache in front-end. All the applicative log are
             </tr>
             <tr>
                 <td>Tomcat home</td>
-                <td><code>/usr/share/apache-tomcat-7.0.22/</code></td>
+                <td><code>/usr/share/tomcat7/</code></td>
             </tr>
             <tr>
                 <td>Tomcat access-log</td>
-                <td><code>/usr/share/apache-tomcat-7.0.22/logs/localhost_access_log.YYYY-MM-DD.txt</code></td>
+                <td><code>/var/lib/tomcat7/logs/localhost_access_log.YYYY-MM-DD.txt</code></td>
             </tr>
             <tr>
                 <td>Application log</td>
-                <td><code>/usr/share/apache-tomcat-7.0.22/logs/catalina.out</code></td>
+                <td><code>/var/lib/tomcat7/logs/catalina.out</code></td>
             </tr>
         </table>
     </p>
