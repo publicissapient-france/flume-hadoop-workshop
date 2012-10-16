@@ -34,6 +34,13 @@
 
             <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterTest</i></p>
             <p>Make it pass on your laptop, then deploy it on your cluster using scp</p>
+
+            <h4>Create home directory for ec2-user</h4>
+            On your hadoop master :
+            <pre>$ sudo su -</pre>
+            <pre>$ sudo -u hdfs hadoop fs -mkdir /user/ec2-user</pre>
+            <pre>$ sudo -u hdfs hadoop fs -chown ec2-user /user/ec2-user</pre>
+            <pre>$ exit</pre>
             
             <h4>Upload your logs into HDFS</h4>
 
@@ -42,8 +49,9 @@
             
             On your hadoop master :
             <pre>$ wget http://xebia-france.github.com/flume-hadoop-workshop/access_log.txt</pre>
-            <pre>$ hadoop fs -mkdir /myLogs</pre>
-            <pre>$ hadoop fs -put access_log.txt /myLogs/.</pre>
+            <pre>$ hadoop fs -mkdir ./myLogs</pre>
+            <pre>$ hadoop fs -put access_log.txt ./myLogs/</pre>
+            <pre>$ hadoop fs -tail ./myLogs/access_log.txt</pre>
 
             <h4>Find every line containing a given word</h4>
 
@@ -97,11 +105,8 @@
 
             Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
 
-            <p>Le contenu de ce workshop est sous <a
-                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br>
-                <a
-                        href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
-                        src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+            <p>Le contenu de ce workshop est sous <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br>
+                <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
         </footer>
 
 
