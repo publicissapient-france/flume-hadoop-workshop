@@ -39,6 +39,8 @@
             
             On your hadoop master :
             <pre>$ wget http://xebia-france.github.com/flume-hadoop-workshop/access_log.txt</pre>
+            <pre>$ hadoop fs -mkdir /myLogs</pre>
+            <pre>$ hadoop fs -put access_log.txt /myLogs/.</pre>
 
             <h4>Find every line containing a given word</h4>
 
