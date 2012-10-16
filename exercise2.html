@@ -45,25 +45,25 @@
             <p>Add syslog source</p>
 
             <pre>
-                 agent.sources = syslog
-                 agent.channels = memoryChannel
-                 agent.channels.memoryChannel.type = memory
-                 agent.channels.memoryChannel.capacity = 10000
+    agent.sources = syslog
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
 
-                 agent.sources.syslog.type = syslogtcp (or syslogudp)
-                 agent.sources.syslog.port = 5140
-                 agent.sources.syslog.host = 127.0.0.1
-                 agent.sources.syslog.channels = memoryChannel
+    agent.sources.syslog.type = syslogtcp (or syslogudp)
+    agent.sources.syslog.port = 5140
+    agent.sources.syslog.host = 127.0.0.1
+    agent.sources.syslog.channels = memoryChannel
             </pre>
 
             <p>Add a sink to a flume agent</p>
 
             <pre>
-                 agent.sinks = avro-forward-sink
-                 agent.sinks.avro-forward-sink.channel = memoryChannel
-                 agent.sinks.avro-forward-sink.type = avro
-                 agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.aws.xebiatechevent.info
-                 agent.sinks.avro-forward-sink.port = 5141
+    agent.sinks = avro-forward-sink
+    agent.sinks.avro-forward-sink.channel = memoryChannel
+    agent.sinks.avro-forward-sink.type = avro
+    agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.aws.xebiatechevent.info
+    agent.sinks.avro-forward-sink.port = 5141
             </pre>
 
             <h4>Configure a flume collector</h4>
@@ -73,24 +73,24 @@
             <p>Source from the first agents</p>
 
             <pre>
-                 agent.sources = avro-collection-source
-                 agent.channels = memoryChannel    
-                 agent.channels.memoryChannel.type = memory
-                 agent.channels.memoryChannel.capacity = 10000
-    
-                 agent.sources.avro-collection-source.channels = memoryChannel
-                 agent.sources.avro-collection-source.type = avro
-                 agent.sources.avro-collection-source.bind = 127.0.0.1
-                 agent.sources.avro-collection-source.port = 5141
+    agent.sources = avro-collection-source
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
+
+    agent.sources.avro-collection-source.channels = memoryChannel
+    agent.sources.avro-collection-source.type = avro
+    agent.sources.avro-collection-source.bind = 127.0.0.1
+    agent.sources.avro-collection-source.port = 5141
             </pre>
 
             <h4>Sink to file</h4>
 
             <pre>
-                agent.sinks = fileSink
-                agent.sinks.fileSink.type = FILE_ROLL
-                agent.sinks.fileSink.channel = memoryChannel
-                agent.sinks.fileSink.sink.directory = /var/log/flume
+    agent.sinks = fileSink
+    agent.sinks.fileSink.type = FILE_ROLL
+    agent.sinks.fileSink.channel = memoryChannel
+    agent.sinks.fileSink.sink.directory = /var/log/flume
             </pre>
 
             <p>Write collected log to a file. On this file you should see log of all server.</p>

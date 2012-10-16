@@ -38,49 +38,49 @@
             <h4>Change sink from file to hdfs</h4>
             
             <pre>
-                agent.sinks = HDFSEventSink
-                agent.sinks.HDFSEventSink.channel = memoryChannel
-                agent.sinks.HDFSEventSink.type = hdfs
-                agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
+    agent.sinks = HDFSEventSink
+    agent.sinks.HDFSEventSink.channel = memoryChannel
+    agent.sinks.HDFSEventSink.type = hdfs
+    agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
             </pre>
 
             <h4>Install an another agent collector</h4>
             
             <pre>
-                agent.sources = avro-collection-source
-                agent.channels = memoryChannel
-                agent.sinks = HDFSEventSink
-                agent.sinks.HDFSEventSink.channel = memoryChannel
-                agent.sinks.HDFSEventSink.type = hdfs
-                agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
- 
-                agent.channels.memoryChannel.type = memory
-                agent.channels.memoryChannel.capacity = 10000
- 
-                agent.sources.avro-collection-source.channels = memoryChannel
-                agent.sources.avro-collection-source.type = avro
-                agent.sources.avro-collection-source.bind = flume-hadoop-slave-team-X.xebia-techevent.com
-                agent.sources.avro-collection-source.port = 5142
+    agent.sources = avro-collection-source
+    agent.channels = memoryChannel
+    agent.sinks = HDFSEventSink
+    agent.sinks.HDFSEventSink.channel = memoryChannel
+    agent.sinks.HDFSEventSink.type = hdfs
+    agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
+
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
+
+    agent.sources.avro-collection-source.channels = memoryChannel
+    agent.sources.avro-collection-source.type = avro
+    agent.sources.avro-collection-source.bind = flume-hadoop-slave-team-X.xebia-techevent.com
+    agent.sources.avro-collection-source.port = 5142
             </pre>
 
             <h4>Configure roundrobin on first flume agent</h4>
             
             <pre>
-                agent.sinkgroups = xebiaFlume
-                agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
-                agent.sinkgroups.xebiaFlume.processor.type = load_balance
-                agent.sinkgroups.xebiaFlume.processor.selector = round_robin
-                
-                agent.sinks = avro-forward-sink avro-forward-sink-secondary
-                agent.sinks.avro-forward-sink.channel = memoryChannel
-                agent.sinks.avro-forward-sink.type = avro
-                agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.xebia-techevent.com
-                agent.sinks.avro-forward-sink.port = 5141
- 
-                agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
-                agent.sinks.avro-forward-sink-secondary.type = avro
-                agent.sinks.avro-forward-sink-secondary.hostname = flume-hadoop-slave-team-X.xebia-techevent.com
-                agent.sinks.avro-forward-sink-secondary.port = 5142
+    agent.sinkgroups = xebiaFlume
+    agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
+    agent.sinkgroups.xebiaFlume.processor.type = load_balance
+    agent.sinkgroups.xebiaFlume.processor.selector = round_robin
+
+    agent.sinks = avro-forward-sink avro-forward-sink-secondary
+    agent.sinks.avro-forward-sink.channel = memoryChannel
+    agent.sinks.avro-forward-sink.type = avro
+    agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.xebia-techevent.com
+    agent.sinks.avro-forward-sink.port = 5141
+
+    agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
+    agent.sinks.avro-forward-sink-secondary.type = avro
+    agent.sinks.avro-forward-sink-secondary.hostname = flume-hadoop-slave-team-X.xebia-techevent.com
+    agent.sinks.avro-forward-sink-secondary.port = 5142
             </pre>
 
         </section>
