@@ -21,7 +21,7 @@
         <header>
             <h1>Flume-hadoop-workshop</h1>
 
-            <h2>Exercise 4. Process your log with map-reduce</h2>
+            <h2>Exercise 1. Process your log with map-reduce</h2>
         </header>
 
         <hr>
@@ -31,6 +31,14 @@
 
             <p>Process your logs using Map/Reduce patterns</p>
 			<p>Unit tests and skeletons are provided, fill the holes !</p>
+
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterTest</i></p>
+            <p>Make it pass on your laptop, then deploy it on your cluster using scp</p>
+            
+            <h4>Upload your logs into HDFS</h4>
+            
+            On your hadoop master :
+            <pre>$ wget http://xebia-france.github.com/flume-hadoop-workshop/access_log.txt</pre>
 
             <h4>Find every line containing a given word</h4>
 
