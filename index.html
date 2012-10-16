@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume and hadoop workshop Xebia france</title>
+    <meta name="Description" CONTENT="Tutorial and exercise on Flume-ng and Hadoop">
+</head>
+
+<body>
+<div id="container">
+<div class="inner">
+
+<header>
+    <h1>Flume-hadoop-workshop</h1>
+
+    <h2>By Xebia France</h2>
+</header>
+
+<!--
+<section id="downloads" class="clearfix">
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/zipball/master" id="download-zip"
+       class="button"><span>Download .zip</span></a>
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/tarball/master" id="download-tar-gz"
+       class="button"><span>Download .tar.gz</span></a>
+</section>
+-->
+
+<hr>
+
+<section id="main_content">
+<h3>Infrastructure</h3>
+
+<p>For this workshop, we provide 4 Amazon EC2 server by team.
+    2 of this server for Hadoop Cluster and 2 for application.</p>
+
+<p><img src="images/infra.png" /></p>
+
+<h4>Your EC2 instance</h4>
+<table>
+    <tr>
+        <th>Role</th>
+        <th>user and instance</th>
+    </tr>
+    <tr>
+        <td>Application 1</td>
+        <td><code>ubuntu@application-team-X-instance-0.aws.xebiatechevent.info</code></td>
+    </tr>
+    <tr>
+        <td>Application 2</td>
+        <td><code>ubuntu@application-team-X-instance-1.aws.xebiatechevent.info</code></td>
+    </tr>
+    <tr>
+        <td>Hadoop 'master'</td>
+        <td><code>ec2-user@flume-hadoop-master-team-X.aws.xebiatechevent.info</code></td>
+    </tr>
+    <tr>
+        <td>Hadoop 'slave'</td>
+        <td><code>ec2-user@flume-hadoop-slave-team-X.aws.xebiatechevent.info</code></td>
+    </tr>
+</table>
+
+<h4>Connection to Amazon EC2 (with macos or linux)</h4>
+
+<p><pre>
+    $ wget https://s3-eu-west-1.amazonaws.com/xebia-workshop-bigdata/xte-flume.pem
+    $ ssh -i xte-flume.pem ec2-user@flume-hadoop-master-team-X.xebia-techevent.com</pre>
+</p>
+
+<h3>Hadoop configuration</h3>
+
+<p>Hadoop is installed as a standard linux application with Cloudera packaging.</p>
+
+<p>
+<table>
+    <tr>
+        <th>Part of application</th>
+        <th>Directory</th>
+    </tr>
+    <tr>
+        <td>configuration</td>
+        <td><code>/etc/hadoop/conf</code></td>
+    </tr>
+    <tr>
+        <td>Namenode log</td>
+        <td><code>/var/log/hadoop-hdfs/hadoop-hdfs-namenode-flume-hadoop-master-team-X.aws.xebiatechevent.info..log</code></td>
+    </tr>
+    <tr>
+        <td>Jobtracker log</td>
+        <td><code>/var/log/hadoop-hdfs/hadoop-hdfs-jobtracker-flume-hadoop-master-team-X.aws.xebiatechevent.info..log</code></td>
+    </tr>
+    <tr>
+        <td>Datanode log</td>
+        <td><code>/var/log/hadoop-hdfs/hadoop-hdfs-datanode-flume-hadoop-master-team-X.aws.xebiatechevent.info..log</code></td>
+    </tr>
+    <tr>
+        <td>Tasktracker log</td>
+        <td><code>/var/log/hadoop-hdfs/hadoop-hdfs-tasktracker-flume-hadoop-master-team-X.aws.xebiatechevent.info..log</code></td>
+    </tr>
+    <tr>
+        <td>Binary</td>
+        <td><code>/usr/lib/hadoop</code></td>
+    </tr>
+</table>
+</p>
+
+<h4>Hadoop Tips and command</h4>
+
+<ul>
+    <li>Stop all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service stop ;
+        done</code></li>
+    <li>Start all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service start ;
+        done</code></li>
+    <li>Restart all services : <code>$ for service in /etc/init.d/hadoop-* ; do sudo $service restart ;
+        done</code></li>
+    <li>Restart only datanode : <code>$ sudo service hadoop-datanode restart</code></li>
+    <li>Restart only tasktracker : <code>$ sudo service hadoop-tasktracker restart</code></li>
+    <li>List all file of an hdfs directory : <code>$ hadoop fs -ls</code></li>
+    <li>List all file of an hdfs directory recursively: <code>$ hadoop fs -lsr</code></li>
+    <li>Upload a file to hdfs : <code>$ hadoop fs -put &lt;local&gt; &lt;dst&gt;</code></li>
+    <li>Download a file from hdfs : <code>$ hadoop fs -get &lt;src&gt; &lt;local&gt;</code></li>
+    <li>View file content from hdfs : <code>$ hadoop fs -cat &lt;file&gt;</code></li>
+    <li>Tail file content from hdfs : <code>$ hadoop fs -tail &lt;file&gt;</code></li>
+    <li>Delete a file from hdfs : <code>$ hadoop fs -rm &lt;file&gt;</code></li>
+    <li>Delete a directory from hdfs : <code>$ hadoop fs -rmr &lt;directory&gt;</code></li>
+    <li>View all fs command : <code>$ hadoop fs</code></li>
+</ul>
+
+<h4>Hadoop web console</h4>
+
+<ul>
+    <li>Hadoop HDFS Console : <code>http://flume-hadoop-master-team-X.aws.xebiatechevent.info:50070/</code></li>
+    <li>Hadoop Job Console : <code>http://flume-hadoop-master-team-X.aws.xebiatechevent.info:50030/</code></li>
+</ul>
+
+<h3>Flume configuration</h3>
+
+<p>Flume is installed as a standard linux application with Cloudera packaging.</p>
+
+<p>
+<table>
+    <tr>
+        <th>Part of application</th>
+        <th>Directory</th>
+    </tr>
+    <tr>
+        <td>configuration</td>
+        <td><code>/etc/flume/conf</code></td>
+    </tr>
+    <tr>
+        <td>log</td>
+        <td><code>/var/log/flume</code></td>
+    </tr>
+    <tr>
+        <td>Binary</td>
+        <td><code>/usr/lib/flume</code></td>
+    </tr>
+</table>
+</p>
+
+<h3>Application Server installation</h3>
+
+The application used for generating log is a standard Java Web application deployed in Tomcat.
+Tomcat generates access log, no apache in front-end. All the applicative log are generated by logback.
+
+<h4>tomcat and application configuration file</h4>
+
+    <p>
+        <table>
+            <tr>
+                <th>Part of application</th>
+                <th>Directory</th>
+            </tr>
+            <tr>
+                <td>Tomcat home</td>
+                <td><code>/usr/share/tomcat7/</code></td>
+            </tr>
+            <tr>
+                <td>Tomcat access-log</td>
+                <td><code>/var/lib/tomcat7/logs/localhost_access_log.YYYY-MM-DD.txt</code></td>
+            </tr>
+            <tr>
+                <td>Application log</td>
+                <td><code>/var/lib/tomcat7/logs/catalina.out</code></td>
+            </tr>
+        </table>
+    </p>
+
+<h4>Tocmat tips</h4>
+
+<ul>
+    <li>Stop tomcat service : <code>$ sudo service tomcat7 stop</code></li>
+    <li>Start tomcat service : <code>$ sudo service tomcat7 start</code></li>
+    <li>Restart tomcat service : <code>$ sudo service tomcat7 restart</code></li>
+</ul>
+
+<h4>Using jmeter for generating load</h4>
+
+<p>Change current directory for jmeter binary</p>
+<p><code>cd /root/jakarta-jmeter-2.5.1/bin</code></p>
+<p>Start a script in command line</p>
+<p><code>./jmeter -n -t ../data/xebia-spring-travel.jmx -j jmeter.log</code></p>
+
+<h4>Syslog configuration</h4>
+
+<p>For this workshop all syslog-ng configuration is ready.
+    We only describe configuration added by us for this workshop after a clean installation</p>
+
+<h3><a href="tips.html">Tips</a></h3>
+<h3><a href="exercise1.html">Exercise 1. Redirect Tomcat log to Syslog</a></h3>
+<h3><a href="exercise2.html">Exercise 2. Centralize log with flume</a></h3>
+<h3><a href="exercise3.html">Exercise 3. Put your log on Hadoop</a></h3>
+<h3><a href="exercise4.html">Exercise 4. Process your log with map-reduce</a></h3>
+
+</section>
+
+
+<footer>
+
+    <h3>Authors and Contributors</h3>
+
+    <p>
+        Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+        Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+        Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+        Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+        Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+        Mathieu Bigorne (<a href="https://github.com/mathieubigorne" class="user-mention">@mathieubigorne</a>),<br/>
+        Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+        Guillaume Arnaud (<a href="https://github.com/GuillaumeArnaud" class="user-mention">@GuillaumeArnaud</a>),<br/>
+        Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+    </p>
+
+    Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+
+    <p>Le contenu de ce workshop est sous <a
+            href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br> <a
+            href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+            src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+</footer>
+
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume and hadoop workshop Xebia france</title>
+    <meta name="Description" CONTENT="Tutorial and exercise on Flume-ng and Hadoop">
+</head>
+
+<body>
+<div id="container">
+    <div class="inner">
+
+        <header>
+            <h1>Flume-hadoop-workshop</h1>
+
+            <h2>Exercise 2. Centralize log with flume</h2>
+        </header>
+
+        <hr>
+
+        <section id="main_content">
+
+            <h4>Goal</h4>
+
+            <p>The goal of this exercise is to centralize all you log in one node and store them in a file (or directory).</p>
+
+            <p><img src="images/exo2.png" width="100%" /></p>
+
+            <p>Flume uses different concepts to collect data, such as source, channel or sink. Those concepts are summarized by the following diagram.</p>
+
+            <p><img src="https://blogs.apache.org/flume/mediaresource/ab0d50f6-a960-42cc-971e-3da38ba3adad" /></p>
+
+			<h4>Configure flume agent</h4>
+
+            <p>Edit flume-ng configuration <code>/etc/flume-ng/conf/flume.conf</code></p>
+
+            <p>Add syslog source</p>
+
+            <pre>
+                 agent.sources = syslog
+                 agent.channels = memoryChannel
+                 agent.channels.memoryChannel.type = memory
+                 agent.channels.memoryChannel.capacity = 10000
+
+                 agent.sources.syslog.type = syslogtcp (or syslogudp)
+                 agent.sources.syslog.port = 5140
+                 agent.sources.syslog.host = 127.0.0.1
+                 agent.sources.syslog.channels = memoryChannel
+            </pre>
+
+            <p>Add a sink to a flume agent</p>
+
+            <pre>
+                 agent.sinks = avro-forward-sink
+                 agent.sinks.avro-forward-sink.channel = memoryChannel
+                 agent.sinks.avro-forward-sink.type = avro
+                 agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.aws.xebiatechevent.info
+                 agent.sinks.avro-forward-sink.port = 5141
+            </pre>
+
+            <h4>Configure a flume collector</h4>
+
+            <p>On flume second agent edit flume configuration file <code>/etc/flume-ng/conf/flume.conf</code></p>
+
+            <p>Source from the first agents</p>
+
+            <pre>
+                 agent.sources = avro-collection-source
+                 agent.channels = memoryChannel    
+                 agent.channels.memoryChannel.type = memory
+                 agent.channels.memoryChannel.capacity = 10000
+    
+                 agent.sources.avro-collection-source.channels = memoryChannel
+                 agent.sources.avro-collection-source.type = avro
+                 agent.sources.avro-collection-source.bind = 127.0.0.1
+                 agent.sources.avro-collection-source.port = 5141
+            </pre>
+
+            <h4>Sink to file</h4>
+
+            <pre>
+                agent.sinks = fileSink
+                agent.sinks.fileSink.type = FILE_ROLL
+                agent.sinks.fileSink.channel = memoryChannel
+                agent.sinks.fileSink.sink.directory = /var/log/flume
+            </pre>
+
+            <p>Write collected log to a file. On this file you should see log of all server.</p>
+
+        </section>
+
+        <footer>
+            <h3>Authors and Contributors</h3>
+
+
+            <p>
+                Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+                Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+                Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+                Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+                Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+                Mathieu Bigorne (<a href="https://github.com/mathieubigorne"
+                                    class="user-mention">@mathieubigorne</a>),<br/>
+                Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+                Guillaume Arnaud (<a href="https://github.com/GuillaumeArnaud" class="user-mention">@GuillaumeArnaud</a>),<br/>
+                Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+            </p>
+
+            Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+            <p>Le contenu de ce workshop est sous <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br> <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+                    src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+        </footer>
+
+
+    </div>
+</div>
+</body>
+</html>

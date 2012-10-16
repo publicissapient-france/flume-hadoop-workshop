@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume and hadoop workshop Xebia france</title>
+    <meta name="Description" CONTENT="Tutorial and exercise on Flume-ng and Hadoop">
+</head>
+
+<body>
+<div id="container">
+<div class="inner">
+
+<header>
+    <h1>Flume-hadoop-workshop</h1>
+
+    <h2>Tips</h2>
+</header>
+
+<section id="downloads" class="clearfix">
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/zipball/master" id="download-zip"
+       class="button"><span>Download .zip</span></a>
+    <a href="https://github.com/xebia-france/flume-hadoop-workshop/tarball/master" id="download-tar-gz"
+       class="button"><span>Download .tar.gz</span></a>
+</section>
+
+<hr>
+
+<section id="main_content">
+
+<h3>Flume tips</h3>
+
+<ul>
+    <li>Stop flume service : <code>$ service flume-ng-agent stop</code></li>
+    <li>Start flume service : <code>$ service flume-ng-agent start</code></li>
+    <li>Restart flume service : <code>$ service flume-ng-agent restart</code></li>
+</ul>
+
+<h4>Flume-ng debugging</h4>
+
+Exemple: Testing flume-ng without external input
+Create a test configuration file my-test-conf.conf <pre>
+
+    minimalist-agent.channels.in-memory-channel.type = memory
+
+    minimalist-agent.sources.dummy-source.channels = in-memory-channel
+    minimalist-agent.sources.dummy-source.type = org.apache.flume.source.StressSource
+
+    minimalist-agent.sinks.logger-sink.channel = in-memory-channel
+    minimalist-agent.sinks.logger-sink.type = logger
+
+    minimalist-agent.channels = in-memory-channel
+    minimalist-agent.sources = dummy-source
+    minimalist-agent.sinks = logger-sink
+</pre>
+
+<p>Start flume-ng with command : <code>flume-ng agent --conf-file my-test-conf.conf -n minimalist-agent</code></p>
+<p>The log file of flume-ng should contains : </p>
+<pre>
+    2012-07-28 14:00:42,084 INFO sink.LoggerSink: Event: { headers:{} body: 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F ................ }
+</pre>
+
+Exemple: Source syslog to console
+Create a test configuration file my-test-conf.conf <pre>
+    # Define a memory channel called ch1 on agent1
+    agent1.channels.ch1.type = memory
+
+    # Here exec1 is source name.
+    agent1.sources.syslog.type = syslogtcp
+    agent1.sources.syslog.port = 1514
+    agent1.sources.syslog.host = localhost
+    agent1.sources.syslog.channels = ch1
+
+    # Define a logger sink that simply logs all events it receives
+    agent1.sinks.loggerSink.channel = ch1
+    agent1.sinks.loggerSink.type = logger
+
+    # Finally, now that we've defined all of our components, tell
+    # agent1 which ones we want to activate.
+    agent1.channels = ch1
+    #source name can be of anything.
+    agent1.sources = syslog
+    #sinkname can be of anything.
+    agent1.sinks = loggerSink
+</pre>
+Start agent from command line : <code>$ flume-ng agent --conf-file my-test-conf.conf -n agent1</code>
+<!--<p>The log file of flume-ng should contains : </p>
+<pre>
+    TODO
+</pre>-->
+
+
+<h4>Source from exec command</h4>
+<pre>
+    agent.sources = tail
+    agent.channels = memoryChannel
+
+    agent.sources.tail.type = exec
+    agent.sources.tail.command = tail -F /var/log/apache2/access.log
+    agent.sources.tail.channels = memoryChannel
+</pre>
+
+<h4>Souce from syslog</h4>
+<pre>
+    agent.sources = syslog
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
+
+    agent.sources.syslog.type = syslogtcp
+    agent.sources.syslog.port = 8200
+    agent.sources.syslog.host = localhost
+    agent.sources.syslog.channels = memoryChannel
+</pre>
+
+<h4>Source from a flume agent</h4>
+<pre>
+    agent.sources = avro-collection-source
+    agent.channels = memoryChannel
+    agent.channels.memoryChannel.type = memory
+    agent.channels.memoryChannel.capacity = 10000
+
+    agent.sources.avro-collection-source.channels = memoryChannel
+    agent.sources.avro-collection-source.type = avro
+    agent.sources.avro-collection-source.bind = localhost
+    agent.sources.avro-collection-source.port = 8200
+</pre>
+
+<h4>Sink to a flume agent</h4>
+<pre>
+    agent.sinks = avro-forward-sink
+    agent.sinks.avro-forward-sink.channel = memoryChannel
+    agent.sinks.avro-forward-sink.type = avro
+    agent.sinks.avro-forward-sink.hostname = localhost
+    agent.sinks.avro-forward-sink.port = 8200
+</pre>
+
+<h4>Sink to file</h4>
+<pre>
+    agent.sinks = fileSink
+    agent.sinks.fileSink.type = FILE_ROLL
+    agent.sinks.fileSink.channels = memoryChannel
+    agent.sinks.fileSink.sink.directory = /var/log/flume
+</pre>
+
+<h4>Sink to HDFS</h4>
+<pre>
+    agent.sinks = HDFSEventSink
+    agent.sinks.HDFSEventSink.channel = memoryChannel
+    agent.sinks.HDFSEventSink.type = hdfs
+    agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
+</pre>
+
+<h4>Sink with load-balancing</h4>
+<pre>
+        agent.sources = seqGenSrc
+        agent.channels = memoryChannel
+        agent.sources.seqGenSrc.type = seq
+
+        agent.sources.seqGenSrc.channels = memoryChannel
+        agent.channels.memoryChannel.type = memory
+        agent.channels.memoryChannel.capacity = 10000
+
+        agent.sinkgroups = xebiaFlume
+        agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
+        agent.sinkgroups.xebiaFlume.processor.type = load_balance
+        agent.sinkgroups.xebiaFlume.processor.selector = round_robin
+
+        agent.sinks = avro-forward-sink avro-forward-sink-secondary
+        agent.sinks.avro-forward-sink.channel = memoryChannel
+        agent.sinks.avro-forward-sink.type = avro
+        agent.sinks.avro-forward-sink.hostname = IP_SLAVE_1
+        agent.sinks.avro-forward-sink.port = 10000
+
+        agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
+        agent.sinks.avro-forward-sink-secondary.type = avro
+        agent.sinks.avro-forward-sink-secondary.hostname = IP_SLAVE_2
+        agent.sinks.avro-forward-sink-secondary.port = 10000
+</pre>
+
+<h3>How develop Map-Reduce job</h3>
+
+A MapReduce program contains often 3 portions :
+<ul>
+    <li>The driver (or job) code. That runs on the client to configure and submit the job.</li>
+    <li>The mapper. That runs on many times on cluster for processing portion of input data.</li>
+    <li>The reducer. That runs on many times on cluster for processing intermediate values.</li>
+</ul>
+
+<p>For this workshop a skeleton of these different parts are provided for each exercises.
+    The goal are only to implements the map and reduce function.</p>
+
+<h4>Map class</h4>
+
+Example with wordcount mapper. This mapper count each word. It take input key and value and send them to output.
+
+<pre>
+    <code>
+        public class WordcountMapper extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
+            @Override
+            protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+                String line = value.toString();
+                for (String word : line.split("\\W+")) {
+                    if(word.length() > 0){
+                        context.write(new Text(word), new IntWritable(1);
+                    }
+                }
+            }
+        }
+    </code>
+</pre>
+
+For writing a Mapper :
+<ul>
+    <li>You must extends Mapper class with &lt;INPUT_KEY_TYPE, INPUT_KEY_VALUE, OUTPUT_KEY_TYPE,
+        OUTPUT_KEY_VALUE&gt;</li>
+    <li>With a FileInputFormat (all exercises of this workshop use it) INPUT_KEY_TYPE are LongWritable and
+        INPUT_KEY_VALUE are Text</li>
+    <li>the map method is called exactly one time by line, with key as file offset and value as line value</li>
+    <li>For each call of map, you can call context.write(...) 0, 1 or n times</li>
+</ul>
+
+<h4>Reduce class</h4>
+
+Example with wordcount reducer. This reducer count occurence of each word.
+
+<pre>
+    <code>
+        public class CountReducer extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+            @Override
+            protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException {
+                Text currentKey = key;
+                int count = 0;
+                for (IntWritable value : values) {
+                    count += value.get();
+                }
+                context.write(currentKey, new IntWritable(count));
+            }
+        }
+    </code>
+</pre>
+
+For writing a Reducer :
+<ul>
+    <li>You must extends Reducer class with &lt;INPUT_KEY_TYPE, INPUT_KEY_VALUE, OUTPUT_KEY_TYPE,
+        OUTPUT_KEY_VALUE&gt;</li>
+    <li>Your input key and value are of the same type as the mapper's output key and value.</li>
+</ul>
+
+
+<h4>Job class</h4>
+
+WordcountJob.
+
+<pre>
+    <code>
+        public class WordcountJob {
+
+            public static void main(String[] args) throws Exception {
+                if (args.length != 2) {
+                    System.out.printf("Usage : %s [generic options] &lt;input dir&gt; &lt;output dir&gt;\n",
+                    WordcountJob.class.getSimpleName());
+                    return;
+                }
+                Job job = new Job(new Configuration(), "Wordcount job");
+                job.setJarByClass(WordcountJob.class);
+
+                FileInputFormat.setInputPaths(job, new Path(args[0]));
+                FileOutputFormat.setOutputPath(job, new Path(args[1] + "/" + System.currentTimeMillis()));
+                job.setMapperClass(WordcountMapper.class);
+                job.setReducerClass(CountReducer.class);
+                job.setOutputKeyClass(Text.class);
+                job.setOutputValueClass(IntWritable.class);
+                System.exit(job.waitForCompletion(true) ? 0 : 1);
+            }
+        }
+    </code>
+</pre>
+
+For writing a Job :
+<ul>
+    <li>Job is the glue beetwen your mapper and reducer classes.</li>
+    <li>Every parameter needed is dependent of your previous classes.</li>
+</ul>
+
+<h3>Using mrunit for testing</h3>
+
+<pre>
+    <code>
+        public class WordcountJobTest {
+
+            MapDriver&lt;LongWritable, Text, Text, IntWritable&gt; mapDriver;
+            ReduceDriver&lt;Text, IntWritable, Text, IntWritable&gt; reduceDriver;
+
+            @Before
+            public void setUp() {
+                mapDriver = MapDriver.newMapDriver(new WordcountMapper());
+                reduceDriver = ReduceDriver.newReduceDriver(new CountReducer());
+            }
+
+            @Test
+            public void test_wordcount_mapper() {
+                mapDriver.withInput(new LongWritable(1), new Text("Xebia Hadoop workshop"))
+                         .withOutput(new Text("Xebia"), new IntWritable(1))
+                         .withOutput(new Text("Hadoop"), new IntWritable(1))
+                         .withOutput(new Text("Workshop"), new IntWritable(1))
+                         .runTest();
+            }
+
+            @Test
+            public void test_wordcount_reducer() {
+                reduceDriver.withInput(new Text("Xebia"),
+                                       Arrays.asList(new IntWritable[]{new IntWritable(1), new IntWritable(1)}))
+                            .withOutput(new Text("Xebia"), new IntWritable(2))
+                            .runTest();
+            }
+        }
+    </code>
+</pre>
+
+<h3>Using provided skeleton</h3>
+
+<p>
+    For this workshop we provides a maven project for developing Jobs.
+    You can import project on your IDE or use maven command line for building project with <code>mvn clean
+    install</code>.
+    The jarfile will be deployed in <code>target</code> directory.
+</p>
+
+<h3>Run job locally for testing</h3>
+
+<p>
+    You only need to launch the main method of your job. If you don't provide any configuration, your job will then run using the local mode (non-distributed mode using a single Java process).
+</p>
+
+<h3>Deploy and run job to cluster</h3>
+
+<ul>
+    <li>Build the jar. <code>mvn clean install</code></li>
+    <li>Upload the jar to cluster. <code>scp -i ~/xte-flume.pem target/&lt;your jar&gt;.jar
+        ec2-user@flume-hadoop-master-team-X.xebia-techevent.com</code></li>
+    <li>Run the job with <code>$ hadoop jar &lt;your jar&gt;.jar arg1 arg2 arg3</code></li>
+</ul>
+
+
+
+
+</section>
+
+
+<footer>
+
+    <h3>Authors and Contributors</h3>
+
+    <p>
+        Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+        Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+        Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+        Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+        Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+        Mathieu Bigorne (<a href="https://github.com/mathieubigorne" class="user-mention">@mathieubigorne</a>),<br/>
+        Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+        Guillaume Arnaud (<a href="https://github.com/GuillaumeArnaud" class="user-mention">@GuillaumeArnaud</a>),<br/>
+        Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+    </p>
+
+    Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+
+    <p>Le contenu de ce workshop est sous <a
+            href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br> <a
+            href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+            src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+</footer>
+
+
+</div>
+</div>
+</body>
+</html>

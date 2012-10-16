@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume and hadoop workshop Xebia france</title>
+    <meta name="Description" CONTENT="Tutorial and exercise on Flume-ng and Hadoop">
+</head>
+
+<body>
+<div id="container">
+    <div class="inner">
+
+        <header>
+            <h1>Flume-hadoop-workshop</h1>
+
+            <h2>Exercise 3. Put your log on Hadoop</h2>
+        </header>
+
+        <hr>
+
+        <section id="main_content">
+
+            <h4>Goal</h4>
+
+            <p>Add high availability to log aggregation and storage</p>
+            
+            <p><img src="images/exo3.png" width="100%"/></p>
+
+
+            <h4>Change sink from file to hdfs</h4>
+            
+            <pre>
+                agent.sinks = HDFSEventSink
+                agent.sinks.HDFSEventSink.channel = memoryChannel
+                agent.sinks.HDFSEventSink.type = hdfs
+                agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
+            </pre>
+
+            <h4>Install an another agent collector</h4>
+            
+            <pre>
+                agent.sources = avro-collection-source
+                agent.channels = memoryChannel
+                agent.sinks = HDFSEventSink
+                agent.sinks.HDFSEventSink.channel = memoryChannel
+                agent.sinks.HDFSEventSink.type = hdfs
+                agent.sinks.HDFSEventSink.hdfs.path = hdfs://flume-hadoop-master-team-X.xebia-techevent.com
+ 
+                agent.channels.memoryChannel.type = memory
+                agent.channels.memoryChannel.capacity = 10000
+ 
+                agent.sources.avro-collection-source.channels = memoryChannel
+                agent.sources.avro-collection-source.type = avro
+                agent.sources.avro-collection-source.bind = flume-hadoop-slave-team-X.xebia-techevent.com
+                agent.sources.avro-collection-source.port = 5142
+            </pre>
+
+            <h4>Configure roundrobin on first flume agent</h4>
+            
+            <pre>
+                agent.sinkgroups = xebiaFlume
+                agent.sinkgroups.xebiaFlume.sinks = avro-forward-sink avro-forward-sink-secondary
+                agent.sinkgroups.xebiaFlume.processor.type = load_balance
+                agent.sinkgroups.xebiaFlume.processor.selector = round_robin
+                
+                agent.sinks = avro-forward-sink avro-forward-sink-secondary
+                agent.sinks.avro-forward-sink.channel = memoryChannel
+                agent.sinks.avro-forward-sink.type = avro
+                agent.sinks.avro-forward-sink.hostname = flume-hadoop-master-team-X.xebia-techevent.com
+                agent.sinks.avro-forward-sink.port = 5141
+ 
+                agent.sinks.avro-forward-sink-secondary.channel = memoryChannel
+                agent.sinks.avro-forward-sink-secondary.type = avro
+                agent.sinks.avro-forward-sink-secondary.hostname = flume-hadoop-slave-team-X.xebia-techevent.com
+                agent.sinks.avro-forward-sink-secondary.port = 5142
+            </pre>
+
+        </section>
+
+        <footer>
+            <h3>Authors and Contributors</h3>
+
+
+            <p>
+                Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+                Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+                Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+                Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+                Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+                Mathieu Bigorne (<a href="https://github.com/mathieubigorne"
+                                    class="user-mention">@mathieubigorne</a>),<br/>
+                Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+                Guillaume Arnaud (<a href="https://github.com/GuillaumeArnaud" class="user-mention">@GuillaumeArnaud</a>),<br/>
+                Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+            </p>
+
+            Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+            <p>Le contenu de ce workshop est sous <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br> <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+                    src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+        </footer>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Flume and hadoop workshop Xebia france</title>
+    <meta name="Description" CONTENT="Tutorial and exercise on Flume-ng and Hadoop">
+</head>
+
+<body>
+<div id="container">
+    <div class="inner">
+
+        <header>
+            <h1>Flume-hadoop-workshop</h1>
+
+            <h2>Exercise 4. Process your log with map-reduce</h2>
+        </header>
+
+        <hr>
+
+        <section id="main_content">
+            <h4>Goal</h4>
+
+            <p>Process your logs using Map/Reduce patterns</p>
+			<p>Unit tests and skeletons are provided, fill the holes !</p>
+
+            <h4>Find every line containing a given word</h4>
+
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterTest</i></p>
+            <p>Make it pass on your laptop, then deploy it on your cluster using scp</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar word-filter-1.0.jar &lt;word-to-be-filtered&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
+
+            <h4>Count the various http return codes</h4>
+
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.error.SearchCodeJob</i></p>
+            <p>Make it pass on your laptop, then deploy it on your cluster using scp</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar errorcode-filter-1.0.jar &lt;error-code-to-count&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
+            
+            <h4>Count the various http return codes by hour</h4>
+
+            <p>Upgrade your previous job by count codes by the hour the code was returned</p>
+            
+            <p>To run the test on your cluster :</p>
+            <pre>$ hadoop jar errorcode-filter-1.0.jar &lt;error-code-to-count&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
+
+			<h4>Go deeper</h4>
+
+            <p>If you are already here, congratulations !</p>
+            
+            <p>Feel free to implement more use cases</p>
+            <p>Here are some ideas for you to code : display top 10 requested pages, identify slowest page...
+
+
+        </section>
+
+        <footer>
+            <h3>Authors and Contributors</h3>
+
+
+            <p>
+                Julien Buret (<a href="https://github.com/jburet" class="user-mention">@jburet</a>),<br/>
+                Pablo Lopez (<a href="https://github.com/plopez" class="user-mention">@plopez</a>),<br/>
+                Nicolas Jozwiak (<a href="https://github.com/njozwiak" class="user-mention">@njozwiak</a>),<br/>
+                Julia Mateo (<a href="https://github.com/jmateo" class="user-mention">@jmateo</a>),<br/>
+                Bertrand Dechoux (<a href="https://github.com/BertrandDechoux" class="user-mention">@BertrandDechoux</a>),<br/>
+                Mathieu Bigorne (<a href="https://github.com/mathieubigorne"
+                                    class="user-mention">@mathieubigorne</a>),<br/>
+                Mathieu Breton (<a href="https://github.com/mbreton" class="user-mention">@mbreton</a>),<br/>
+                Guillaume Arnaud (<a href="https://github.com/GuillaumeArnaud" class="user-mention">@GuillaumeArnaud</a>),<br/>
+                Pierre Laporte (<a href="https://github.com/pingtimeout" class="user-mention">@pingtimeout</a>),<br/>
+            </p>
+
+            Flume-hadoop-workshop is maintained by <a href="https://github.com/xebia-france">xebia-france</a><br>
+
+            <p>Le contenu de ce workshop est sous <a
+                    href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/">contrat Creative Commons</a>.<br> <br>
+                <a
+                        href="http://creativecommons.org/licenses/by-nc-nd/2.0/fr/"><img
+                        src="http://blog.xebia.fr/wp-content/uploads/2012/01/by-nc-nd.png"></a></p>
+        </footer>
+
+
+    </div>
+</div>
+</body>
+</html>
