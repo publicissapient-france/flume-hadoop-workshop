@@ -54,14 +54,16 @@
 
             <h4>Find every line containing a given word</h4>
 
-            <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterTest</i></p>
+            <p>Look at <i>fr.xebia.techevent.hadoop.job.word.WordFilterJobTest</i></p>
             <p>Make it pass on your laptop, then deploy it on your cluster using scp</p>
             
             <p>To run the test on your cluster :</p>
             <pre>$ hadoop jar word-filter-1.0.jar &lt;word-to-be-filtered&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
 
-            <h4>Download sources of the project:</h4>
-            <a href="flume-hadoop-workshop.zip" id="download-zip" class="button"><span>Download .zip</span></a>
+            <h4>Download sources of the project</h4>
+            <section id="downloads" class="clearfix">
+                <a href="lume-hadoop-workshop.zip" id="download-zip" class="button"><span>Download .zip</span></a>
+            </section>
 
             <h4>Count the various http return codes</h4>
 
@@ -74,6 +76,12 @@
             <h4>Count the various http return codes by hour</h4>
 
             <p>Upgrade your previous job by count codes by the hour the code was returned</p>
+
+            <p>To build your jar :</p>
+            <pre>mvn assembly:single</pre>
+
+            <p>To send your jar on your cluster :</p>
+            <pre>sftp -o IdentityFile=xte-flume.pem ec2-user@flume-hadoop-master-team-X.aws.xebiatechevent.info</pre>
             
             <p>To run the test on your cluster :</p>
             <pre>$ hadoop jar errorcode-filter-1.0.jar &lt;error-code-to-count&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
