@@ -41,11 +41,10 @@
             <pre>$ sudo -u hdfs hadoop fs -mkdir /user/ec2-user</pre>
             <pre>$ sudo -u hdfs hadoop fs -chown ec2-user /user/ec2-user</pre>
             <pre>$ exit</pre>
+
+            <p>Sometime, for that is work it's necessary to restart all services (cf. http://xebia-france.github.com/flume-hadoop-workshop/)</p>
             
             <h4>Upload your logs into HDFS</h4>
-
-            Download zip :
-            <pre>https://docs.google.com/open?id=0B9u66XbO9hyKMmdiWkhMR29tcHM</pre>
             
             On your hadoop master :
             <pre>$ wget http://xebia-france.github.com/flume-hadoop-workshop/access_log.txt</pre>
@@ -60,6 +59,9 @@
             
             <p>To run the test on your cluster :</p>
             <pre>$ hadoop jar word-filter-1.0.jar &lt;word-to-be-filtered&gt; &lt;hdfs-input-path&gt; &lt;hdfs-output-path&gt;</pre>
+
+            <h4>Download sources of the project:</h4>
+            <a href="flume-hadoop-workshop.zip" id="download-zip" class="button"><span>Download .zip</span></a>
 
             <h4>Count the various http return codes</h4>
 
