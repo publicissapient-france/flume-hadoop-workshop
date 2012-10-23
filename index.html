@@ -71,8 +71,11 @@
 
 <p><pre>
     $ wget https://s3-eu-west-1.amazonaws.com/xebia-workshop-bigdata/xte-flume.pem
-    $ ssh -i xte-flume.pem ec2-user@flume-hadoop-slave-team-1.aws.xebiatechevent.info
-    $ chmod 400 xte-flume.pem</pre>
+    $ chmod 400 xte-flume.pem
+    $ ssh -i xte-flume.pem ec2-user@flume-hadoop-slave-team-1.aws.xebiatechevent.info</pre>
+</p>
+<p>
+    If you are on Ubuntu add the option "--no-check-certificate" for the wget command
 </p>
 
 <h3>Hadoop configuration</h3>
